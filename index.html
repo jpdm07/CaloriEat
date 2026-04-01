@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>
+    (function () {
+      try {
+        var q = new URLSearchParams(window.location.search);
+        if (q.get('guest') === '1' || q.get('signup') === '1') return;
+        if (window.localStorage.getItem('currentUser')) return;
+        window.location.replace('welcome.html');
+      } catch (e) {}
+    })();
+  </script>
   <meta name="theme-color" content="#064e3b" />
   <meta name="color-scheme" content="dark" />
   <title>CaloriEat — Nutrition &amp; calorie tracker</title>
