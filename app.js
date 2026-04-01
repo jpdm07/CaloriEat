@@ -6,6 +6,64 @@ let currentUser = localStorage.getItem('currentUser') || null;
 let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
 let userGoal = { type: 'maintain', target: 2000 };
 
+/** Set from Log Food / Profile so index can reload profiles when user returns (incl. another tab). */
+const CE_PROFILES_DIRTY_KEY = 'ce_calorieat_profiles_dirty';
+
+function markCaloriEatProfilesDirty() {
+  try {
+    sessionStorage.setItem(CE_PROFILES_DIRTY_KEY, '1');
+  } catch (e) {
+    /* private mode */
+  }
+}
+
+function reloadProfilesFromStorageIfDirty() {
+  try {
+    if (sessionStorage.getItem(CE_PROFILES_DIRTY_KEY) === '1') {
+      profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+      sessionStorage.removeItem(CE_PROFILES_DIRTY_KEY);
+      return true;
+    }
+  } catch (e) {
+    /* ignore */
+  }
+  return false;
+}
+
+window.markCaloriEatProfilesDirty = markCaloriEatProfilesDirty;
+
+/** Sage / muted palette — matches premium.css (no bright UI blues) */
+const CE_PALETTE = {
+  ringProgress: '#5a8f7b',
+  ringOver: '#6fa08e',
+  protein: '#6b8cae',
+  proteinFill: 'rgba(107, 140, 174, 0.16)',
+  carbs: '#8aa4a0',
+  carbsFill: 'rgba(138, 164, 160, 0.16)',
+  fat: '#c4a574',
+  fatFill: 'rgba(196, 165, 116, 0.16)',
+  sugar: '#b87a6a',
+  sugarFill: 'rgba(184, 122, 106, 0.16)',
+  caloriesBar: '#5a8f7b',
+  caloriesBarHover: '#4a7a68',
+  breakfast: '#c9a227',
+  breakfastFill: 'rgba(201, 162, 39, 0.14)',
+  lunch: '#d4b84a',
+  lunchFill: 'rgba(212, 184, 74, 0.14)',
+  dinner: '#5a9278',
+  dinnerFill: 'rgba(90, 146, 120, 0.14)',
+  snack: '#8a7a9a',
+  snackFill: 'rgba(138, 122, 154, 0.14)',
+  weightLine: '#7a9e92',
+  weightFill: 'rgba(122, 158, 146, 0.14)',
+  projection: '#c4a574',
+  projectionFill: 'rgba(196, 165, 116, 0.08)',
+  pieSliceBorder: '#141816',
+  tooltipBg: '#1b201e',
+  tooltipTitle: '#9ebfb4',
+  tooltipBorder: '#3d5248',
+};
+
 // Time period state for charts
 let categoriesTimePeriod = 'overall';
 let macrosTimePeriod = 'overall';
@@ -142,12 +200,12 @@ function getCategoryDisplayName(category) {
 // Function to get category color
 function getCategoryColor(category) {
   const colors = {
-    fruits: { border: '#ff6b9d', bg: 'rgba(255, 107, 157, 0.1)' },
-    veggies: { border: '#00c853', bg: 'rgba(0, 200, 83, 0.1)' },
-    wholeGrains: { border: '#d4a574', bg: 'rgba(212, 165, 116, 0.1)' },
-    leanProteins: { border: '#1f6feb', bg: 'rgba(31, 111, 235, 0.1)' },
-    processedFoods: { border: '#fb8500', bg: 'rgba(251, 133, 0, 0.1)' },
-    sugaryFoods: { border: '#dc2626', bg: 'rgba(220, 38, 38, 0.1)' },
+    fruits: { border: '#b87a8f', bg: 'rgba(184, 122, 143, 0.14)' },
+    veggies: { border: '#5a9278', bg: 'rgba(90, 146, 120, 0.14)' },
+    wholeGrains: { border: '#a68f6e', bg: 'rgba(166, 143, 110, 0.14)' },
+    leanProteins: { border: '#6b8cae', bg: 'rgba(107, 140, 174, 0.14)' },
+    processedFoods: { border: '#b8835a', bg: 'rgba(184, 131, 90, 0.14)' },
+    sugaryFoods: { border: '#a85a5a', bg: 'rgba(168, 90, 90, 0.14)' },
     other: { border: '#6b7280', bg: 'rgba(107, 116, 128, 0.1)' }
   };
   return colors[category] || colors.other;
@@ -161,32 +219,29 @@ const sections = {
   profile: document.getElementById('profileSection'),
   app: document.getElementById('appSection'),
   dashboard: document.getElementById('dashboardSection'),
-  account: document.getElementById('accountSection'),
   help: document.getElementById('helpSection'),
   contact: document.getElementById('contactSection')
 };
 
 const menuIcon = document.getElementById('menuIcon');
 const menuDropdown = document.getElementById('menuDropdown');
-const menuHome = document.getElementById('menuHome');
+
+function syncCaloriEatMenuDropdownLayout() {
+  if (!menuDropdown) return;
+  if (menuDropdown.style.display !== 'block') {
+    menuDropdown.style.display = 'none';
+  }
+}
 const menuDashboard = document.getElementById('menuDashboard');
 const menuMeals = document.getElementById('menuMeals');
 const menuAccount = document.getElementById('menuAccount');
-const menuHelp = document.getElementById('menuHelp');
-const menuContact = document.getElementById('menuContact');
+const menuAppHelp = document.getElementById('menuAppHelp');
 const menuLogout = document.getElementById('menuLogout');
 
-const loginBtn = document.getElementById('loginBtn');
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const errorPopup = document.getElementById('errorPopup');
+function isCaloriEatIndexSpa() {
+  return !!document.getElementById('dashboardSection');
+}
 
-const forgotLink = document.getElementById('forgotLink');
-const resetPopup = document.getElementById('resetPopup');
-const closeResetPopup = document.getElementById('closeResetPopup');
-const resetLink = document.getElementById('resetLink');
-
-const signUpLink = document.getElementById('signUpLink');
 const saveProfileBtn = document.getElementById('saveProfileBtn');
 const setupUsername = document.getElementById('setupUsername');
 const setupEmail = document.getElementById('setupEmail');
@@ -252,55 +307,64 @@ const ringFatText = document.getElementById('ringFatText');
 const ringSugarText = document.getElementById('ringSugarText');
 const ringVeggiesText = document.getElementById('ringVeggiesText');
 
-const acctDisplayNameInput = document.getElementById('acctDisplayName');
-const acctEmailInput = document.getElementById('acctEmail');
-const acctBirthdateInput = document.getElementById('acctBirthdate');
-const acctHeightInput = document.getElementById('acctHeightFtIn');
-const acctWeightInput = document.getElementById('acctWeightLbs');
-const acctGenderInput = document.getElementById('acctGender');
-const saveAccountBtn = document.getElementById('saveAccountBtn');
-const clearDataBtn = document.getElementById('clearDataBtn');
-
 /********************************
  * MENU VISIBILITY HELPER - WITH FIX
  ********************************/
 function updateMenuVisibility() {
   const loggedIn = !!currentUser;
 
-  const menuIconEl = document.getElementById('menuIcon');
   const menuDropdownEl = document.getElementById('menuDropdown');
-  const headerLinksRow = document.querySelector('.header-links-row');
-
-  if (menuIconEl) {
-    menuIconEl.style.display = loggedIn ? "block" : "none";
-    menuIconEl.style.visibility = loggedIn ? "visible" : "hidden";
-  }
+  const appBottomNav = document.getElementById('appBottomNav');
 
   if (menuDropdownEl) {
-    menuDropdownEl.style.display = "none";
+    syncCaloriEatMenuDropdownLayout();
   }
 
-  if (headerLinksRow) {
-    headerLinksRow.style.display = loggedIn ? "flex" : "none";
-    headerLinksRow.style.visibility = loggedIn ? "visible" : "hidden";
+  if (appBottomNav) {
+    if (loggedIn) {
+      appBottomNav.classList.add("is-visible");
+      document.body.classList.add("ce-pad-bottom");
+    } else {
+      appBottomNav.classList.remove("is-visible");
+      document.body.classList.remove("ce-pad-bottom");
+    }
   }
 
-  if (menuAccount) menuAccount.style.display = loggedIn ? "block" : "none";
-  if (menuLogout) menuLogout.style.display = loggedIn ? "block" : "none";
-  
- const menuDashboardEl = document.getElementById('menuDashboard');
-if (menuDashboardEl) menuDashboardEl.style.display = loggedIn ? "block" : "none";
+  document.querySelectorAll('.menu-auth-only').forEach((el) => {
+    el.style.display = loggedIn ? '' : 'none';
+  });
+  document.querySelectorAll('.menu-public-only').forEach((el) => {
+    el.style.display = loggedIn ? 'none' : '';
+  });
+
+  if (typeof window.syncCaloriEatNavLabels === 'function') {
+    window.syncCaloriEatNavLabels();
+  }
 }
 
 /********************************
  * GENERAL HELPERS
  ********************************/
 function showSection(sectionEl) {
+  if (sectionEl && sectionEl.id === 'dashboardSection') {
+    reloadProfilesFromStorageIfDirty();
+  }
   Object.values(sections).forEach(s => {
     if (s) s.classList.add('hidden');
   });
   if (sectionEl) sectionEl.classList.remove('hidden');
-  if (menuDropdown) menuDropdown.style.display = 'none';
+  syncCaloriEatMenuDropdownLayout();
+  window.scrollTo(0, 0);
+  if (typeof window.tryShowCaloriEatNavFromBanner === 'function') {
+    window.tryShowCaloriEatNavFromBanner();
+  }
+  if (
+    sectionEl &&
+    sectionEl.id === 'dashboardSection' &&
+    typeof window.refreshCaloriEatDashboardInsights === 'function'
+  ) {
+    window.refreshCaloriEatDashboardInsights();
+  }
 }
 
 window.sections = sections;
@@ -441,24 +505,41 @@ function showChartTooltip(event, content) {
 /********************************
  * NAV MENU EVENTS
  ********************************/
-if (menuIcon) {
+if (menuIcon && menuDropdown) {
   menuIcon.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (!menuDropdown) return;
-    menuDropdown.style.display =
-      (menuDropdown.style.display === 'block') ? 'none' : 'block';
+    const open = menuDropdown.style.display !== 'block';
+    menuDropdown.style.display = open ? 'block' : 'none';
+    menuIcon.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 }
 
-document.addEventListener('click', () => {
-  if (menuDropdown) menuDropdown.style.display = 'none';
+document.addEventListener('click', (e) => {
+  if (!menuDropdown || !menuIcon) return;
+  if (menuIcon.contains(e.target) || menuDropdown.contains(e.target)) return;
+  menuDropdown.style.display = 'none';
+  menuIcon.setAttribute('aria-expanded', 'false');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menuDropdown && menuIcon) {
+    menuDropdown.style.display = 'none';
+    menuIcon.setAttribute('aria-expanded', 'false');
+  }
+});
+
+window.addEventListener('resize', () => {
+  syncCaloriEatMenuDropdownLayout();
 });
 
 if (menuDashboard) {
   menuDashboard.addEventListener('click', (e) => {
-    e.preventDefault();
-    showApp();
+    if (isCaloriEatIndexSpa() && currentUser) {
+      e.preventDefault();
+      showApp();
+    }
     if (menuDropdown) menuDropdown.style.display = 'none';
+    if (menuIcon) menuIcon.setAttribute('aria-expanded', 'false');
   });
 }
 
@@ -469,28 +550,25 @@ if (menuMeals) {
   });
 }
 
-if (menuAccount) {
-  menuAccount.addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection(sections.account);
-    loadAccountForm();
+function bindHeaderProfileNav(link) {
+  if (!link) return;
+  link.addEventListener('click', () => {
     if (menuDropdown) menuDropdown.style.display = 'none';
+    if (menuIcon) menuIcon.setAttribute('aria-expanded', 'false');
   });
 }
 
-if (menuHelp) {
-  menuHelp.addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection(sections.help);
-    if (menuDropdown) menuDropdown.style.display = 'none';
-  });
-}
+bindHeaderProfileNav(menuAccount);
+bindHeaderProfileNav(document.getElementById('headerNavProfile'));
 
-if (menuContact) {
-  menuContact.addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection(sections.contact);
+if (menuAppHelp) {
+  menuAppHelp.addEventListener('click', (e) => {
+    if (isCaloriEatIndexSpa() && currentUser) {
+      e.preventDefault();
+      showSection(sections.help);
+    }
     if (menuDropdown) menuDropdown.style.display = 'none';
+    if (menuIcon) menuIcon.setAttribute('aria-expanded', 'false');
   });
 }
 
@@ -499,6 +577,7 @@ if (menuLogout) {
     e.preventDefault();
     doLogout();
     if (menuDropdown) menuDropdown.style.display = 'none';
+    if (menuIcon) menuIcon.setAttribute('aria-expanded', 'false');
   });
 }
 
@@ -526,99 +605,10 @@ if (linkWeighIn) {
 /********************************
  * AUTH / SIGNUP / PROFILE
  ********************************/
-if (loginBtn) {
-  loginBtn.addEventListener('click', () => {
-    const username = usernameInput.value.trim();
-    const pwd = passwordInput.value;
-
-    if (profiles[username] && profiles[username].password === pwd) {
-      currentUser = username;
-      localStorage.setItem('currentUser', currentUser);
-      if (profiles[currentUser].goal) userGoal = profiles[currentUser].goal;
-
-      // Force show header IMMEDIATELY before showApp
-      const menuIconEl = document.getElementById('menuIcon');
-      const headerLinksRow = document.querySelector('.header-links-row');
-      const headerEl = document.querySelector('header');
-      
-      if (menuIconEl) {
-        menuIconEl.style.display = "block";
-        menuIconEl.style.visibility = "visible";
-        menuIconEl.style.opacity = "1";
-      }
-      if (headerLinksRow) {
-        headerLinksRow.style.display = "flex";
-        headerLinksRow.style.visibility = "visible";
-        headerLinksRow.style.opacity = "1";
-      }
-      if (headerEl) {
-        headerEl.style.display = "block";
-        headerEl.style.visibility = "visible";
-      }
-
-      // Now show the app
-      showApp();
-      
-      // Update menu visibility again after a delay
-      setTimeout(() => {
-        updateMenuVisibility();
-      }, 100);
-      
-      return;
-    }
-
-    errorPopup.style.display = 'block';
-    setTimeout(() => { errorPopup.style.display = 'none'; }, 2500);
-  });
-}
-
 function doLogout() {
   localStorage.removeItem('currentUser');
   currentUser = null;
-  if (usernameInput) usernameInput.value = '';
-  if (passwordInput) passwordInput.value = '';
-  showSection(sections.login);
-  updateMenuVisibility();
-}
-
-if (forgotLink) {
-  forgotLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (!resetPopup) return;
-    resetPopup.classList.remove('hidden');
-    resetPopup.style.display = 'block';
-  });
-}
-
-if (closeResetPopup) {
-  closeResetPopup.addEventListener('click', () => {
-    resetPopup.classList.add('hidden');
-    resetPopup.style.display = 'none';
-  });
-}
-
-if (resetLink) {
-  resetLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Reset flow not implemented in this demo.');
-  });
-}
-
-if (signUpLink) {
-  signUpLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    currentUser = null;
-    clearProfileSetupFields();
-    showSection(sections.profile);
-    updateMenuVisibility();
-  });
-}
-
-if (backToLoginLink) {
-  backToLoginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection(sections.login);
-  });
+  window.location.href = 'welcome.html';
 }
 
 if (saveProfileBtn) {
@@ -642,6 +632,16 @@ if (saveProfileBtn) {
         signupErrorBox.style.display = 'block';
       } else {
         alert('Please complete username, email, and password.');
+      }
+      return;
+    }
+
+    if (typeof window.CALORIEAT_GUEST_KEY !== 'undefined' && username === window.CALORIEAT_GUEST_KEY) {
+      if (signupErrorBox) {
+        signupErrorBox.textContent = 'That username is reserved. Please choose a different one.';
+        signupErrorBox.style.display = 'block';
+      } else {
+        alert('That username is reserved. Please choose a different one.');
       }
       return;
     }
@@ -672,6 +672,9 @@ if (saveProfileBtn) {
       displayName: username,
       email,
       password: pwd,
+      contactPhone: '',
+      profileNotes: '',
+      eatingPattern: '',
       birthdate: birthdateVal || "",
       height: parsedHeight,
       weightLbs: weightVal ? parseFloat(weightVal) : null,
@@ -700,98 +703,6 @@ if (saveProfileBtn) {
 }
 
 /********************************
- * ACCOUNT PAGE (UPDATE PROFILE)
- ********************************/
-function loadAccountForm() {
-  const u = profiles[currentUser];
-  if (!u) return;
-
-  if (acctDisplayNameInput) acctDisplayNameInput.value = u.displayName || u.username || '';
-  if (acctEmailInput) acctEmailInput.value = u.email || '';
-  if (acctBirthdateInput) acctBirthdateInput.value = u.birthdate || '';
-  if (acctHeightInput) acctHeightInput.value = u.height ? formatHeightDisplay(u.height) : '';
-  if (acctWeightInput) acctWeightInput.value = (u.weightLbs !== undefined && u.weightLbs !== null) ? u.weightLbs : '';
-  if (acctGenderInput) acctGenderInput.value = u.gender || 'male';
-}
-
-if (clearDataBtn) {
-  clearDataBtn.addEventListener('click', () => {
-    const u = profiles[currentUser];
-    if (!u) {
-      alert("You must be logged in.");
-      return;
-    }
-
-    u.meals = [];
-    u.weighIns = [];
-
-    localStorage.setItem('profiles', JSON.stringify(profiles));
-    alert("Your logged data has been cleared.");
-
-    showApp();
-  });
-}
-
-if (saveAccountBtn) {
-  saveAccountBtn.addEventListener('click', () => {
-    const u = profiles[currentUser];
-    if (!u) {
-      alert("You must log in before updating your profile.");
-      return;
-    }
-
-    const newDisplayName = acctDisplayNameInput ? acctDisplayNameInput.value.trim() : "";
-    const newEmail = acctEmailInput ? acctEmailInput.value.trim() : "";
-    const newBirthdate = acctBirthdateInput ? acctBirthdateInput.value.trim() : "";
-    const newHeightRaw = acctHeightInput ? acctHeightInput.value.trim() : "";
-    const newWeight = acctWeightInput ? acctWeightInput.value.trim() : "";
-    const newGender = acctGenderInput ? acctGenderInput.value : "";
-
-    let updatedHeight = u.height;
-    if (newHeightRaw !== "") {
-      const parsedHeight = parseHeightFtIn(newHeightRaw);
-      if (!parsedHeight) {
-        alert("Please enter height like 6'1\", 5 11, or 62 for 6'2\".");
-        return;
-      }
-      updatedHeight = parsedHeight;
-    }
-
-    let updatedWeight = u.weightLbs;
-    let newWeighInNeeded = false;
-    if (newWeight !== "" && !isNaN(parseFloat(newWeight))) {
-      const weightNum = parseFloat(newWeight);
-      updatedWeight = weightNum;
-      if (u.weightLbs !== weightNum) {
-        newWeighInNeeded = true;
-      }
-    }
-
-    u.displayName = newDisplayName || u.displayName || u.username;
-    u.email = newEmail || u.email;
-    u.birthdate = newBirthdate || u.birthdate || "";
-    u.height = updatedHeight;
-    u.weightLbs = updatedWeight;
-    u.gender = newGender || u.gender;
-
-    if (newWeighInNeeded) {
-      if (!u.weighIns) u.weighIns = [];
-      u.weighIns.push({
-        date: todayStr(),
-        weightLbs: updatedWeight
-      });
-    }
-
-    localStorage.setItem('profiles', JSON.stringify(profiles));
-
-    alert('Profile updated.');
-
-    showApp();
-    updateMenuVisibility();
-  });
-}
-
-/********************************
  * GOALS & TARGETS
  ********************************/
 if (saveGoalBtn) {
@@ -809,6 +720,7 @@ if (saveGoalBtn) {
     if (currentUser && profiles[currentUser]) {
       profiles[currentUser].goal = userGoal;
       localStorage.setItem('profiles', JSON.stringify(profiles));
+      markCaloriEatProfilesDirty();
     }
 
     alert('Goal saved successfully!');
@@ -833,6 +745,7 @@ if (saveTargetsBtn) {
     u.macroGoals.veggiesTarget = vT;
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     alert('Daily targets saved.');
   });
 }
@@ -887,7 +800,9 @@ if (addMealBtn) {
         meals: [],
         goal: userGoal,
         weighIns: [],
-        macroGoals: {}
+        macroGoals: {},
+        eatingPattern: '',
+        profileNotes: ''
       };
     }
 
@@ -903,6 +818,7 @@ if (addMealBtn) {
     });
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
 
     mealInput.value = '';
     calInput.value = '';
@@ -938,6 +854,7 @@ if (addWeighInBtn) {
     user.weightLbs = parseFloat(wVal);
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     weighInLbsInput.value = '';
 
     alert('Weight recorded successfully!');
@@ -1110,6 +1027,7 @@ function showMealEditor(row, meal, index) {
     user.meals[index].veggies = newVeg;
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     renderMeals();
   });
 
@@ -1125,6 +1043,7 @@ function deleteMeal(index) {
   const user = profiles[currentUser];
   user.meals.splice(index, 1);
   localStorage.setItem('profiles', JSON.stringify(profiles));
+  markCaloriEatProfilesDirty();
   renderMeals();
 }
 
@@ -1150,32 +1069,43 @@ function renderMeals() {
       mealList.appendChild(row);
     });
 
-    if (totalCalories) totalCalories.textContent = `Total Calories: ${total}`;
+    if (totalCalories) totalCalories.textContent = `${total.toLocaleString()} kcal`;
 
     const dailyTarget = (user.goal && user.goal.target) ? user.goal.target : 2000;
     const remaining = dailyTarget - total;
 
-    if (remainingCalories) remainingCalories.textContent = `Remaining Calories: ${remaining}`;
+    if (remainingCalories) remainingCalories.textContent = `${remaining.toLocaleString()} kcal`;
     if (goalDisplay) {
-      goalDisplay.textContent = `Goal: ${(user.goal && user.goal.type) ? user.goal.type : 'maintain'} (${dailyTarget} cal)`;
+      const gtype = (user.goal && user.goal.type) ? user.goal.type : 'maintain';
+      const typeLabel = { maintain: 'Maintain', lose: 'Lose', gain: 'Gain' }[gtype] || gtype;
+      goalDisplay.textContent = `${typeLabel} · ${dailyTarget.toLocaleString()} kcal`;
     }
   }
 
   const nameToShow = user.displayName || user.username || currentUser || 'User';
   if (welcomeMsg) {
-    welcomeMsg.textContent = `Hello ${nameToShow}!`;
+    welcomeMsg.textContent = `Hi, ${nameToShow}`;
   }
   if (userDisplay) {
-    userDisplay.textContent = `Logged in as: ${nameToShow}`;
+    userDisplay.textContent = nameToShow;
   }
 
-  const heightStr = user.height ? formatHeightDisplay(user.height) : 'N/A';
+  const heightStr = user.height ? formatHeightDisplay(user.height) : '—';
   const weightStr = (user.weightLbs !== undefined && user.weightLbs !== null)
-    ? `${user.weightLbs} lbs`
-    : 'N/A';
+    ? `${user.weightLbs} lb`
+    : '—';
 
   if (profileDisplay) {
-    profileDisplay.textContent = `Height: ${heightStr} | Weight: ${weightStr}`;
+    profileDisplay.textContent = `${heightStr} · ${weightStr}`;
+  }
+
+  const dashEl = document.getElementById('dashboardSection');
+  if (
+    dashEl &&
+    !dashEl.classList.contains('hidden') &&
+    typeof window.refreshCaloriEatDashboardInsights === 'function'
+  ) {
+    window.refreshCaloriEatDashboardInsights();
   }
 }
 
@@ -1250,7 +1180,7 @@ function drawRing(canvas, value, goal, unitLabel, labelEl) {
   ctx.arc(center, center, baseRadius, startAngle, blueEndAngle);
   ctx.lineWidth = baseWidth;
   ctx.lineCap = 'round';
-  ctx.strokeStyle = '#1f6feb';
+  ctx.strokeStyle = CE_PALETTE.ringProgress;
   ctx.stroke();
 
   if (pctOver > 0) {
@@ -1259,7 +1189,7 @@ function drawRing(canvas, value, goal, unitLabel, labelEl) {
     ctx.arc(center, center, baseRadius + 3, startAngle, greenEndAngle);
     ctx.lineWidth = baseWidth - 4;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#00c853';
+    ctx.strokeStyle = CE_PALETTE.ringOver;
     ctx.stroke();
   }
 
@@ -1314,7 +1244,7 @@ function renderAverageCalories() {
   
   const user = profiles[currentUser];
   if (!user || !user.meals || user.meals.length === 0) {
-    avgCaloriesDisplay.innerHTML = '<strong>0 cal/day</strong> <span style="font-size: 0.85rem; color: #9e9e9e;">(No meals logged)</span>';
+    avgCaloriesDisplay.innerHTML = '<strong>0 kcal / day</strong> <span class="avg-cal-sub">(no meals yet)</span>';
     return;
   }
   
@@ -1322,13 +1252,13 @@ function renderAverageCalories() {
   const avgCals = calculateAverageCalories(user.meals, period);
   
   const periodLabels = {
-    'day': 'cal/day',
-    'week': 'cal/week',
-    'month': 'cal/month',
-    'year': 'cal/year'
+    'day': 'kcal / day',
+    'week': 'kcal / week',
+    'month': 'kcal / month',
+    'year': 'kcal / year'
   };
   
-  avgCaloriesDisplay.innerHTML = `<strong>${Math.round(avgCals)} ${periodLabels[period]}</strong>`;
+  avgCaloriesDisplay.innerHTML = `<strong>${Math.round(avgCals).toLocaleString()} ${periodLabels[period]}</strong>`;
 }
 
 // Calculate average calories based on period
@@ -1432,7 +1362,7 @@ function renderMacrosPieChart() {
   // Prepare data for pie chart
   const labels = ['Protein', 'Carbs', 'Fat', 'Sugar'];
   const data = [averages.protein, averages.carbs, averages.fat, averages.sugar];
-  const colors = ['#1f6feb', '#8ecae6', '#ffb703', '#fb5607'];
+  const colors = [CE_PALETTE.protein, CE_PALETTE.carbs, CE_PALETTE.fat, CE_PALETTE.sugar];
   
   // Destroy existing chart if it exists
   if (macrosPieChartInstance) {
@@ -1448,7 +1378,7 @@ function renderMacrosPieChart() {
       datasets: [{
         data: data,
         backgroundColor: colors,
-        borderColor: '#1e1e1e',
+        borderColor: CE_PALETTE.pieSliceBorder,
         borderWidth: 2
       }]
     },
@@ -1465,10 +1395,10 @@ function renderMacrosPieChart() {
           }
         },
         tooltip: {
-          backgroundColor: '#1e1e1e',
-          titleColor: '#8ecae6',
+          backgroundColor: CE_PALETTE.tooltipBg,
+          titleColor: CE_PALETTE.tooltipTitle,
           bodyColor: '#f0f0f0',
-          borderColor: '#1f6feb',
+          borderColor: CE_PALETTE.tooltipBorder,
           borderWidth: 1,
           padding: 12,
           callbacks: {
@@ -1517,7 +1447,7 @@ function renderCategoriesPieChart() {
     averages.processedFoods,
     averages.sugaryFoods
   ];
-  const colors = ['#06d6a0', '#f72585', '#ffbe0b', '#1f6feb', '#8b0000', '#ff006e'];
+  const colors = ['#5a9278', '#b87a8f', '#a68f6e', '#6b8cae', '#b8835a', '#a85a5a'];
   
   // Destroy existing chart
   if (categoriesPieChartInstance) {
@@ -1533,7 +1463,7 @@ function renderCategoriesPieChart() {
       datasets: [{
         data: data,
         backgroundColor: colors,
-        borderColor: '#1e1e1e',
+        borderColor: CE_PALETTE.pieSliceBorder,
         borderWidth: 2
       }]
     },
@@ -1550,10 +1480,10 @@ function renderCategoriesPieChart() {
           }
         },
         tooltip: {
-          backgroundColor: '#1e1e1e',
-          titleColor: '#8ecae6',
+          backgroundColor: CE_PALETTE.tooltipBg,
+          titleColor: CE_PALETTE.tooltipTitle,
           bodyColor: '#f0f0f0',
-          borderColor: '#1f6feb',
+          borderColor: CE_PALETTE.tooltipBorder,
           borderWidth: 1,
           padding: 12,
           callbacks: {
@@ -1593,7 +1523,7 @@ function renderMealTypePieChart() {
   // Prepare data for pie chart
   const labels = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
   const data = [averages.breakfast, averages.lunch, averages.dinner, averages.snack];
-  const colors = ['#ffb703', '#8ecae6', '#1f6feb', '#fb5607'];
+  const colors = [CE_PALETTE.breakfast, CE_PALETTE.lunch, CE_PALETTE.dinner, CE_PALETTE.snack];
   
   // Destroy existing chart
   if (mealTypePieChartInstance) {
@@ -1609,7 +1539,7 @@ function renderMealTypePieChart() {
       datasets: [{
         data: data,
         backgroundColor: colors,
-        borderColor: '#1e1e1e',
+        borderColor: CE_PALETTE.pieSliceBorder,
         borderWidth: 2
       }]
     },
@@ -1626,10 +1556,10 @@ function renderMealTypePieChart() {
           }
         },
         tooltip: {
-          backgroundColor: '#1e1e1e',
-          titleColor: '#8ecae6',
+          backgroundColor: CE_PALETTE.tooltipBg,
+          titleColor: CE_PALETTE.tooltipTitle,
           bodyColor: '#f0f0f0',
-          borderColor: '#1f6feb',
+          borderColor: CE_PALETTE.tooltipBorder,
           borderWidth: 1,
           padding: 12,
           callbacks: {
@@ -2044,10 +1974,10 @@ function renderMacrosLegend(meals) {
   const percentages = calculateMacroPercentages(meals);
   
   const macros = [
-    { key: 'protein', label: '💪 Protein', color: '#1f6feb' },
-    { key: 'carbs', label: '🍞 Carbs', color: '#8ecae6' },
-    { key: 'fat', label: '🥑 Fat', color: '#ffb703' },
-    { key: 'sugar', label: '🍬 Sugar', color: '#fb5607' }
+    { key: 'protein', label: '💪 Protein', color: CE_PALETTE.protein },
+    { key: 'carbs', label: '🍞 Carbs', color: CE_PALETTE.carbs },
+    { key: 'fat', label: '🥑 Fat', color: CE_PALETTE.fat },
+    { key: 'sugar', label: '🍬 Sugar', color: CE_PALETTE.sugar }
   ];
   
   let html = '<div class="legend-title">Macro Distribution</div><div class="legend-grid">';
@@ -2401,6 +2331,10 @@ function renderCharts() {
   
   // Setup time period selectors
   setupTimePeriodSelectors();
+
+  if (typeof window.refreshCaloriEatDashboardInsights === 'function') {
+    window.refreshCaloriEatDashboardInsights();
+  }
 }
 
 function setupTimePeriodSelectors() {
@@ -2931,8 +2865,8 @@ function renderCaloriesChart(dates, dataByDate) {
       datasets: [{
         label: 'Calories Per Day',
         data: caloriesData,
-        backgroundColor: '#1f6feb',
-        hoverBackgroundColor: '#265dbf'
+        backgroundColor: CE_PALETTE.caloriesBar,
+        hoverBackgroundColor: CE_PALETTE.caloriesBarHover
       }]
     },
     options: {
@@ -3018,8 +2952,8 @@ function renderMacrosChart(filteredDates, filteredDataByDate) {
         {
           label: 'Protein',
           data: proteinData,
-          borderColor: '#1f6feb',
-          backgroundColor: 'rgba(31, 111, 235, 0.1)',
+          borderColor: CE_PALETTE.protein,
+          backgroundColor: CE_PALETTE.proteinFill,
           borderWidth: 3,
           pointRadius: 3,
           pointHoverRadius: 5,
@@ -3029,8 +2963,8 @@ function renderMacrosChart(filteredDates, filteredDataByDate) {
         {
           label: 'Carbs',
           data: carbsData,
-          borderColor: '#8ecae6',
-          backgroundColor: 'rgba(142, 202, 230, 0.1)',
+          borderColor: CE_PALETTE.carbs,
+          backgroundColor: CE_PALETTE.carbsFill,
           borderWidth: 3,
           pointRadius: 3,
           pointHoverRadius: 5,
@@ -3040,8 +2974,8 @@ function renderMacrosChart(filteredDates, filteredDataByDate) {
         {
           label: 'Fat',
           data: fatData,
-          borderColor: '#ffb703',
-          backgroundColor: 'rgba(255, 183, 3, 0.1)',
+          borderColor: CE_PALETTE.fat,
+          backgroundColor: CE_PALETTE.fatFill,
           borderWidth: 3,
           pointRadius: 3,
           pointHoverRadius: 5,
@@ -3051,8 +2985,8 @@ function renderMacrosChart(filteredDates, filteredDataByDate) {
         {
           label: 'Sugar',
           data: sugarData,
-          borderColor: '#fb5607',
-          backgroundColor: 'rgba(251, 86, 7, 0.1)',
+          borderColor: CE_PALETTE.sugar,
+          backgroundColor: CE_PALETTE.sugarFill,
           borderWidth: 3,
           pointRadius: 3,
           pointHoverRadius: 5,
@@ -3638,8 +3572,8 @@ function renderMealTypeChart(filteredDates, filteredDataByDate) {
         {
           label: 'Breakfast',
           data: breakfastData,
-          borderColor: '#ff9800',
-          backgroundColor: 'rgba(255, 152, 0, 0.1)',
+          borderColor: CE_PALETTE.breakfast,
+          backgroundColor: CE_PALETTE.breakfastFill,
           borderWidth: 2,
           tension: 0.3,
           pointRadius: 3,
@@ -3649,8 +3583,8 @@ function renderMealTypeChart(filteredDates, filteredDataByDate) {
         {
           label: 'Lunch',
           data: lunchData,
-          borderColor: '#ffc107',
-          backgroundColor: 'rgba(255, 193, 7, 0.1)',
+          borderColor: CE_PALETTE.lunch,
+          backgroundColor: CE_PALETTE.lunchFill,
           borderWidth: 2,
           tension: 0.3,
           pointRadius: 3,
@@ -3660,8 +3594,8 @@ function renderMealTypeChart(filteredDates, filteredDataByDate) {
         {
           label: 'Dinner',
           data: dinnerData,
-          borderColor: '#2196f3',
-          backgroundColor: 'rgba(33, 150, 243, 0.1)',
+          borderColor: CE_PALETTE.dinner,
+          backgroundColor: CE_PALETTE.dinnerFill,
           borderWidth: 2,
           tension: 0.3,
           pointRadius: 3,
@@ -3671,8 +3605,8 @@ function renderMealTypeChart(filteredDates, filteredDataByDate) {
         {
           label: 'Snack',
           data: snackData,
-          borderColor: '#9c27b0',
-          backgroundColor: 'rgba(156, 39, 176, 0.1)',
+          borderColor: CE_PALETTE.snack,
+          backgroundColor: CE_PALETTE.snackFill,
           borderWidth: 2,
           tension: 0.3,
           pointRadius: 3,
@@ -3909,10 +3843,10 @@ function renderMealTypeLegend(meals) {
   });
 
   const colors = {
-    breakfast: '#ff9800',
-    lunch: '#ffc107',
-    dinner: '#2196f3',
-    snack: '#9c27b0'
+    breakfast: CE_PALETTE.breakfast,
+    lunch: CE_PALETTE.lunch,
+    dinner: CE_PALETTE.dinner,
+    snack: CE_PALETTE.snack
   };
 
   const labels = {
@@ -4009,8 +3943,8 @@ function renderWeightChart(user) {
   const datasets = [{
     label: 'Weight (lbs)',
     data: weightVals,
-    borderColor: '#8ecae6',
-    backgroundColor: 'rgba(142, 202, 230, 0.1)',
+    borderColor: CE_PALETTE.weightLine,
+    backgroundColor: CE_PALETTE.weightFill,
     borderWidth: 3,
     pointRadius: 3,
     pointHoverRadius: 5,
@@ -4023,8 +3957,8 @@ function renderWeightChart(user) {
     datasets.push({
       label: 'Projected Weight (lbs)',
       data: projectedWeights,
-      borderColor: '#ffbe0b',
-      backgroundColor: 'rgba(255, 190, 11, 0.05)',
+      borderColor: CE_PALETTE.projection,
+      backgroundColor: CE_PALETTE.projectionFill,
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 3,
@@ -4125,18 +4059,7 @@ if (sendMessageBtn) {
  * INIT / STARTUP
  ********************************/
 function showApp() {
-  // Force header visibility FIRST
-  const menuIconEl = document.getElementById('menuIcon');
-  const headerLinksRow = document.querySelector('.header-links-row');
-  if (menuIconEl) {
-    menuIconEl.style.display = "block";
-    menuIconEl.style.visibility = "visible";
-  }
-  if (headerLinksRow) {
-    headerLinksRow.style.display = "flex";
-    headerLinksRow.style.visibility = "visible";
-  }
-  
+  reloadProfilesFromStorageIfDirty();
   // Dashboard is now the main / home view
   showSection(sections.dashboard);
 
@@ -4156,7 +4079,18 @@ function showApp() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const qpBoot = new URLSearchParams(window.location.search);
+  if (qpBoot.get('guest') === '1' && typeof bootstrapCaloriEatGuestIfNeeded === 'function') {
+    bootstrapCaloriEatGuestIfNeeded();
+  }
+
   if (!currentUser) currentUser = localStorage.getItem('currentUser') || null;
+  profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+  if (typeof window.ensureCaloriEatGuestProfile === 'function' && typeof window.CALORIEAT_GUEST_KEY !== 'undefined' && currentUser === window.CALORIEAT_GUEST_KEY) {
+    profiles = window.ensureCaloriEatGuestProfile(profiles);
+    localStorage.setItem('profiles', JSON.stringify(profiles));
+    if (profiles[currentUser] && profiles[currentUser].goal) userGoal = profiles[currentUser].goal;
+  }
   updateMenuVisibility();
 
   if (sections && sections.dashboard && typeof showSection === 'function') {
@@ -4166,8 +4100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentUser) {
       if (page === 'account') {
-        showSection(sections.account);
-        loadAccountForm();
+        window.location.replace('profile.html');
+        return;
       } else if (page === 'help') {
         showSection(sections.help);
       } else if (page === 'contact') {
@@ -4178,9 +4112,20 @@ document.addEventListener('DOMContentLoaded', () => {
         showApp();
       }
     } else {
-      showSection(sections.login);
-      updateMenuVisibility();
+      const signup = urlParams.get('signup');
+      if (signup === '1') {
+        clearProfileSetupFields();
+        showSection(sections.profile);
+        updateMenuVisibility();
+      } else {
+        showSection(sections.login);
+        updateMenuVisibility();
+      }
     }
+  }
+
+  if (!currentUser && window.location.hash === '#loginSection') {
+    window.location.replace('sign-in.html');
   }
   
   // Setup average calories selector
@@ -4188,6 +4133,18 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Setup pie chart selectors
   setupPieChartSelectors();
+
+  // After Log Food (or another tab) updates localStorage, refresh dashboard when user comes back
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !currentUser) return;
+    if (!sections || !sections.dashboard) return;
+    if (sections.dashboard.classList.contains('hidden')) return;
+    if (!reloadProfilesFromStorageIfDirty()) return;
+    renderMeals();
+    renderDashboardRings();
+    renderCharts();
+    if (typeof renderAllPieCharts === 'function') renderAllPieCharts();
+  });
 });
 
 /********************************
@@ -4241,16 +4198,16 @@ function setupFullscreenHandlers() {
 }
 
 function positionExpandButton(container, button, canvas) {
-  // Get canvas position relative to container
+  if (container.querySelector('.chart-canvas-head')) {
+    button.style.top = '';
+    button.style.right = '';
+    button.style.position = '';
+    return;
+  }
   const containerRect = container.getBoundingClientRect();
   const canvasRect = canvas.getBoundingClientRect();
-  
-  // Check if this is a simple chart (calorie or weight) by checking for chart-header
   const hasComplexControls = container.querySelector('.chart-header');
-  
-  // Position button just above the canvas (where grid lines start)
-  // Simple charts need less offset, complex charts need more
-  const offset = hasComplexControls ? 35 : 10; // 10px for simple, 35px for complex
+  const offset = hasComplexControls ? 35 : 10;
   const topOffset = canvasRect.top - containerRect.top - offset;
   button.style.top = `${topOffset}px`;
 }
@@ -4289,8 +4246,6 @@ function toggleFullscreen(container) {
     
     if (expandBtn) {
       expandBtn.setAttribute('title', 'Exit fullscreen');
-      // In fullscreen, position at top-right with fixed offset
-      expandBtn.style.top = '2rem';
     }
     
     // Resize chart to fullscreen with longer delay for DOM to settle
@@ -4322,9 +4277,125 @@ function resizeChart(chartType, isFullscreen) {
   }
 }
 
+function resizeAllDashboardCharts() {
+  [
+    caloriesChartInstance,
+    macrosChartInstance,
+    veggiesChartInstance,
+    mealTypeChartInstance,
+    weightChartInstance,
+    macrosPieChartInstance,
+    categoriesPieChartInstance,
+    mealTypePieChartInstance
+  ].forEach((ch) => {
+    try {
+      if (ch && typeof ch.resize === 'function') ch.resize();
+    } catch (e) { /* ignore */ }
+  });
+}
+
+/** After panels open or when data is sparse, force layout so screenshots still render. */
+function updateAllDashboardCharts() {
+  [
+    caloriesChartInstance,
+    macrosChartInstance,
+    veggiesChartInstance,
+    mealTypeChartInstance,
+    weightChartInstance,
+    macrosPieChartInstance,
+    categoriesPieChartInstance,
+    mealTypePieChartInstance
+  ].forEach((ch) => {
+    try {
+      if (ch && typeof ch.resize === 'function') ch.resize();
+      if (ch && typeof ch.update === 'function') ch.update('none');
+    } catch (e) { /* ignore */ }
+  });
+}
+
+window.resizeAllDashboardCharts = resizeAllDashboardCharts;
+window.updateAllDashboardCharts = updateAllDashboardCharts;
+
+function resizeDashboardChartsInPanel(bodyEl) {
+  if (!bodyEl) return;
+  const map = [
+    ['calorieChart', () => caloriesChartInstance],
+    ['macrosChart', () => macrosChartInstance],
+    ['veggiesChart', () => veggiesChartInstance],
+    ['mealTypeChart', () => mealTypeChartInstance],
+    ['weightChart', () => weightChartInstance],
+    ['macrosPieChart', () => macrosPieChartInstance],
+    ['categoriesPieChart', () => categoriesPieChartInstance],
+    ['mealTypePieChart', () => mealTypePieChartInstance]
+  ];
+  map.forEach(([id, getInst]) => {
+    const canvas = document.getElementById(id);
+    if (!canvas || !bodyEl.contains(canvas)) return;
+    const inst = getInst();
+    if (inst && typeof inst.resize === 'function') {
+      try {
+        inst.resize();
+      } catch (e) { /* ignore */ }
+    }
+  });
+}
+
+function initDashboardChartPanels() {
+  const root = document.getElementById('dashboardSection');
+  if (!root) return;
+  const chartByCanvasId = {
+    calorieChart: () => caloriesChartInstance,
+    macrosChart: () => macrosChartInstance,
+    veggiesChart: () => veggiesChartInstance,
+    mealTypeChart: () => mealTypeChartInstance,
+    weightChart: () => weightChartInstance,
+    macrosPieChart: () => macrosPieChartInstance,
+    categoriesPieChart: () => categoriesPieChartInstance,
+    mealTypePieChart: () => mealTypePieChartInstance
+  };
+  root.querySelectorAll('[data-dash-chart-panel]').forEach((panel) => {
+    const btn = panel.querySelector('.dash-chart-panel__toggle');
+    const body = panel.querySelector('.dash-chart-panel__body');
+    if (!btn || !body) return;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      const next = !open;
+      btn.setAttribute('aria-expanded', next ? 'true' : 'false');
+      body.hidden = !next;
+      panel.classList.toggle('dash-chart-panel--open', next);
+      if (next) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            resizeDashboardChartsInPanel(body);
+            body.querySelectorAll('canvas[id]').forEach((canvas) => {
+              const getInst = chartByCanvasId[canvas.id];
+              const inst = getInst ? getInst() : null;
+              try {
+                if (inst && typeof inst.update === 'function') inst.update('none');
+              } catch (e) { /* ignore */ }
+            });
+            root.querySelectorAll('.chart-container[data-chart]').forEach((container) => {
+              const expandBtn = container.querySelector('.expand-btn');
+              const canvas = container.querySelector('canvas');
+              if (expandBtn && canvas && !container.classList.contains('fullscreen')) {
+                positionExpandButton(container, expandBtn, canvas);
+              }
+            });
+          });
+        });
+      }
+    });
+  });
+}
+
 // Initialize fullscreen handlers when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupFullscreenHandlers);
-} else {
+function setupDashboardChartUi() {
   setupFullscreenHandlers();
+  initDashboardChartPanels();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupDashboardChartUi);
+} else {
+  setupDashboardChartUi();
 }

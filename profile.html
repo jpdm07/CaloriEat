@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#064e3b" />
+  <meta name="color-scheme" content="dark" />
+  <title>Profile — CaloriEat</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body id="top" class="profile-editor-page">
+  <header class="site-header">
+    <div class="header-top-row">
+      <div class="header-left">
+        <h1 class="visually-hidden">CaloriEat</h1>
+        <a href="welcome.html" class="brand" aria-label="CaloriEat home">
+          <span class="brand__mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"/><path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"/></svg>
+          </span>
+          <span class="brand__text">CaloriEat</span>
+        </a>
+      </div>
+
+      <div class="header-top-row__cluster">
+        <nav class="header-core-nav" id="headerCoreNav" aria-label="Primary shortcuts">
+          <a href="welcome.html" class="header-core-nav__link">Home</a>
+          <a href="help.html" class="header-core-nav__link">Help</a>
+          <a href="faq.html" class="header-core-nav__link">FAQs</a>
+          <a href="sign-in.html" class="header-core-nav__profile menu-public-only" id="headerNavProfilePublic" aria-label="Sign in to open your profile">
+            <svg class="header-core-nav__profile-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+          <a href="profile.html" class="header-core-nav__profile menu-auth-only" id="headerNavProfile" aria-label="Your Profile">
+            <svg class="header-core-nav__profile-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+        </nav>
+      <div class="header-menu-wrap">
+        <div class="menu-icon" id="menuIcon" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></div>
+        <nav class="dropdown" id="menuDropdown" aria-label="Main menu">
+          <a href="sign-in.html" id="menuSignIn" class="menu-public-only">Sign in</a>
+          <hr class="menu-divider menu-auth-only" />
+          <a href="index.html?page=dashboard" id="menuDashboard" class="menu-auth-only">Dashboard</a>
+          <a href="set-goals.html" id="menuGoals" class="menu-auth-only">Goals</a>
+          <a href="add-meal.html" id="menuLogFood" class="menu-auth-only">Log Food</a>
+          <a href="weigh-in.html" id="menuWeight" class="menu-auth-only">Weight</a>
+          <a href="profile.html" id="menuAccount" class="menu-auth-only">Profile</a>
+          <a href="index.html?page=help" id="menuAppHelp" class="menu-auth-only">Tracker help</a>
+          <hr class="menu-divider" />
+          <a href="faq.html" id="menuFAQ">FAQs</a>
+          <a href="contact.html" id="menuContact">Contact</a>
+          <a href="about.html" id="menuAbout">About</a>
+          <a href="privacy.html" id="menuPrivacy">Privacy</a>
+          <a href="terms.html" id="menuTerms">Terms</a>
+          <a href="security.html" id="menuSecurity">Security</a>
+          <a href="careers.html" id="menuCareers">Careers</a>
+          <hr class="menu-divider menu-auth-only" />
+          <a href="#" id="menuLogout" class="menu-auth-only">Sign out</a>
+        </nav>
+      </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="app-bottom-nav" id="appBottomNav" aria-label="Quick navigation">
+    <a class="app-bottom-nav__link" href="index.html?page=dashboard">Tracker</a>
+    <a class="app-bottom-nav__link" href="set-goals.html">Goals</a>
+    <a class="app-bottom-nav__link" href="add-meal.html">Log Food</a>
+    <a class="app-bottom-nav__link" href="weigh-in.html">Weight</a>
+    <a class="app-bottom-nav__link" href="help.html">Help</a>
+  </nav>
+
+  <main class="container">
+    <p id="profileStatus" class="profile-save-status" role="status" hidden>Saved to this device.</p>
+
+    <div class="page-head">
+      <div class="ce-heading-with-help">
+        <h2>Your Profile</h2>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-profile-intro" title="About your profile"><span class="visually-hidden">Explain profile page</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-profile-intro" class="ce-help-panel" hidden><p>This page is split on purpose: <strong>display</strong> (how the app talks to you), <strong>contact &amp; notes</strong> (your own local records), <strong>body metrics</strong> (context for goals and charts), and <strong>usual meals</strong> (reusable quick fills). Everything stays in this browser only. Sign-in username is fixed above—use <a href="sign-in.html">Sign In</a> with another account to switch users.</p></div>
+      <p class="form-hint">Signed in as <strong id="profileUsernameRo">—</strong></p>
+    </div>
+
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Display</h3>
+        <div class="ce-panel__head-tools">
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-profile-display-panel" title="Why this section is here"><span class="visually-hidden">Explain display section</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+      </div>
+      <div id="help-profile-display-panel" class="ce-help-panel" hidden><p>This lives on Profile (not Sign In) because it’s <strong>how the app addresses you</strong> after you’re already using it—Home and Dashboard greetings use it. Your <strong>username</strong> above stays the storage key for this account and can’t be renamed here.</p></div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctDisplayName">Display name</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-display" title="Why we ask"><span class="visually-hidden">Help: display name</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-display" class="ce-help-panel" hidden><p>We use this for friendly copy (“Hi, …”) so you don’t see your raw username everywhere. It doesn’t change how you sign in.</p></div>
+        <input type="text" id="acctDisplayName" placeholder="How we greet you" autocomplete="nickname">
+      </div>
+    </div>
+
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Contact &amp; notes</h3>
+        <div class="ce-panel__head-tools">
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-profile-contact-panel" title="Why these fields are on Profile"><span class="visually-hidden">Explain contact section</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+      </div>
+      <div id="help-profile-contact-panel" class="ce-help-panel" hidden><p>Email and phone are <strong>not</strong> used for login or password reset in this build—they’re here so you can keep contact info next to your tracker on this device (for example, your own reference or a care contact). Notes capture things the app doesn’t have dedicated fields for. Nothing in this section is sent to a server.</p></div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctEmail">Email</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-email" title="Why we ask"><span class="visually-hidden">Help: email</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-email" class="ce-help-panel" hidden><p>Optional. Handy if you want your address on file beside your log; CaloriEat does not mail you or verify it in this version.</p></div>
+        <input type="email" id="acctEmail" placeholder="For your records" autocomplete="email">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctPhone">Phone / other contact</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-phone" title="Why we ask"><span class="visually-hidden">Help: phone</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-phone" class="ce-help-panel" hidden><p>Optional. Use it for anything you’d scribble in the margin of a paper diary—second number, clinic line, etc.—stored only here.</p></div>
+        <input type="text" id="acctPhone" placeholder="Optional" autocomplete="tel">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctNotes">Notes</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-notes" title="Why we ask"><span class="visually-hidden">Help: notes</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-notes" class="ce-help-panel" hidden><p>For context the structured fields don’t cover: allergies, medications to remember with meals, coach or dietitian name, or reminders you want visible whenever you open Profile. Words like <strong>vegetarian</strong>, <strong>vegan</strong>, <strong>keto</strong>, or <strong>busy</strong> help the dashboard tailor gentle suggestions—nothing is sent off this device.</p></div>
+        <textarea id="acctNotes" rows="3" placeholder="Anything you want to remember locally (allergies, coach contact, etc.)"></textarea>
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctEatingPattern">How you usually eat</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-eating-pattern" title="Why this is here"><span class="visually-hidden">Help: eating pattern</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-eating-pattern" class="ce-help-panel" hidden><p>The dashboard <strong>Personalized insights</strong> block uses this with your goals and meal names—takeout vs home cooking, night-shift timing, or training-focused eating—so suggestions fit your real life. It never leaves this device.</p></div>
+        <select id="acctEatingPattern">
+          <option value="">Prefer not to say</option>
+          <option value="mostly_home">Mostly cook at home</option>
+          <option value="mixed">Mix of home &amp; dining out</option>
+          <option value="often_takeout">Often takeout / restaurants</option>
+          <option value="night_shift">Night shift / late-night meals</option>
+          <option value="athlete">Training / higher activity</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Body metrics</h3>
+        <div class="ce-panel__head-tools">
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-profile-body-panel" title="Why this isn’t the Weight page"><span class="visually-hidden">Explain body metrics section</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+      </div>
+      <div id="help-profile-body-panel" class="ce-help-panel" hidden><p>These describe <strong>you</strong> as a baseline for the app—separate from the dated entries on <a href="weigh-in.html">Weight</a>, which build the trend line over time. Updating weight here can also drop a point on that history when the number changes. Height, birthdate, and gender support personalized context (for example, display and rough estimates); they never leave this browser.</p></div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctBirthdate">Birthdate</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-birth" title="Why we ask"><span class="visually-hidden">Help: birthdate</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-birth" class="ce-help-panel" hidden><p>Lets the app derive age when that matters for copy or estimates. Leave blank if you prefer not to store it.</p></div>
+        <input type="date" id="acctBirthdate">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctHeightFtIn">Height</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-height" title="Why we ask"><span class="visually-hidden">Help: height</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-height" class="ce-help-panel" hidden><p>Used for height-dependent context (for example BMI-style views) if the app references it. Formats: <strong>6&apos;1&quot;</strong>, <strong>5 11</strong>, or total inches like <strong>72</strong>.</p></div>
+        <input type="text" id="acctHeightFtIn" placeholder="6'1&quot;, 5 11, or 72" autocomplete="off">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctWeightLbs">Weight (lb)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-weight" title="Why we ask"><span class="visually-hidden">Help: weight</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-weight" class="ce-help-panel" hidden><p>Your current profile weight drives summaries that use “latest weight.” If you change it and tap Save, the app can append a weigh-in for today so the dashboard chart stays consistent.</p></div>
+        <input type="number" id="acctWeightLbs" step="0.1" placeholder="e.g. 184.5" min="0">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="acctGender">Gender</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-prof-gender" title="Why we ask"><span class="visually-hidden">Help: gender</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-prof-gender" class="ce-help-panel" hidden><p>Some defaults and language in the app reference sex for rough estimates. Choose the option that best matches how you use the tracker; it isn’t shared off-device.</p></div>
+        <select id="acctGender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Usual Meals</h3>
+        <div class="ce-panel__head-tools">
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-profile-usual-meals" title="About usual meals and columns"><span class="visually-hidden">Explain usual meals and nutrition columns</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+      </div>
+      <div id="help-profile-usual-meals" class="ce-help-panel" hidden><p>These aren’t today’s log—they’re <strong>reusable templates</strong> so <a href="add-meal.html">Log Food</a> can fill the form in one tap after you pick a meal type. That’s why they live on Profile next to your identity, not inside a single day’s diary. Each row needs a <strong>name</strong> and <strong>calories</strong>; other numbers are optional but help rings match your goals when you use a preset.</p><p><strong>kcal</strong> is required for a preset to save. <strong>P / C / F</strong> are protein, carbs, and fat (grams). <strong>Sugar</strong> and <strong>Veg</strong> (cup equivalents) line up with the same rings as on your dashboard—if you leave them blank, Log Food treats them as zero when you tap the preset.</p></div>
+
+      <section class="meal-preset-block" aria-labelledby="preset-h-b">
+        <div class="meal-preset-block__head">
+          <h4 id="preset-h-b" class="meal-preset-block__title">Breakfast</h4>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-preset-slot-breakfast" title="Why breakfast presets are separate"><span class="visually-hidden">Explain breakfast usual meals</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-preset-slot-breakfast" class="ce-help-panel" hidden><p>Only meals you list under <strong>Breakfast</strong> appear as chips after you tap <strong>Breakfast</strong> on Log Food—so your oatmeal shortcuts don’t mix with dinner items.</p></div>
+        <div id="preset-rows-breakfast" class="meal-preset-rows"></div>
+        <button type="button" class="add-preset-btn small-btn small-btn--accent" data-meal-type="breakfast">+ Add breakfast meal</button>
+      </section>
+
+      <section class="meal-preset-block" aria-labelledby="preset-h-l">
+        <div class="meal-preset-block__head">
+          <h4 id="preset-h-l" class="meal-preset-block__title">Lunch</h4>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-preset-slot-lunch" title="Why lunch presets are separate"><span class="visually-hidden">Explain lunch usual meals</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-preset-slot-lunch" class="ce-help-panel" hidden><p>Same idea as breakfast: lunch presets show up only after you choose <strong>Lunch</strong> on Log Food, keeping midday meals organized.</p></div>
+        <div id="preset-rows-lunch" class="meal-preset-rows"></div>
+        <button type="button" class="add-preset-btn small-btn small-btn--accent" data-meal-type="lunch">+ Add lunch meal</button>
+      </section>
+
+      <section class="meal-preset-block" aria-labelledby="preset-h-d">
+        <div class="meal-preset-block__head">
+          <h4 id="preset-h-d" class="meal-preset-block__title">Dinner</h4>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-preset-slot-dinner" title="Why dinner presets are separate"><span class="visually-hidden">Explain dinner usual meals</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-preset-slot-dinner" class="ce-help-panel" hidden><p>Dinner templates stay in this block so they surface only when <strong>Dinner</strong> is selected on Log Food.</p></div>
+        <div id="preset-rows-dinner" class="meal-preset-rows"></div>
+        <button type="button" class="add-preset-btn small-btn small-btn--accent" data-meal-type="dinner">+ Add dinner meal</button>
+      </section>
+
+      <section class="meal-preset-block" aria-labelledby="preset-h-s">
+        <div class="meal-preset-block__head">
+          <h4 id="preset-h-s" class="meal-preset-block__title">Snack</h4>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-preset-slot-snack" title="Why snack presets are separate"><span class="visually-hidden">Explain snack usual meals</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-preset-slot-snack" class="ce-help-panel" hidden><p>Snack presets are offered after you tap <strong>Snack</strong> on Log Food—handy for repeated protein bars, yogurt, etc., without cluttering mealtime lists.</p></div>
+        <div id="preset-rows-snack" class="meal-preset-rows"></div>
+        <button type="button" class="add-preset-btn small-btn small-btn--accent" data-meal-type="snack">+ Add snack</button>
+      </section>
+    </div>
+
+    <div class="ce-panel profile-actions-panel">
+      <div style="margin-bottom: 0.65rem;">
+        <button type="button" id="saveProfilePageBtn" class="btn-welcome-primary">Save profile</button>
+      </div>
+      <div>
+        <button type="button" id="clearLoggedDataBtn" class="btn-danger-outline">Clear logged meals &amp; weigh-ins</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="ce-back-to-top" role="navigation" aria-label="End of page">
+    <a href="#top" class="ce-back-to-top__link">Back to top ↑</a>
+  </div>
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="site-footer__copy">© 2025 CaloriEat. All rights reserved.</p>
+      <nav class="site-footer__nav" aria-label="Footer">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
+        <a href="help.html">Help</a>
+        <a href="faq.html">FAQs</a>
+        <a href="about.html">About</a>
+      </nav>
+      <p class="site-footer__note">Self-tracking tool—not medical advice.</p>
+    </div>
+  </footer>
+
+  <script src="guest-session.js"></script>
+  <script src="field-help.js"></script>
+  <script src="nav-from-context.js"></script>
+  <script src="meal-presets.js"></script>
+  <script src="profile-page.js"></script>
+  <script src="site-nav.js"></script>
+  <script src="ai-chat.js" defer></script>
+</body>
+</html>

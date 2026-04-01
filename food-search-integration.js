@@ -181,13 +181,22 @@ function createFoodSearchUI() {
   searchContainer.className = 'food-search-container';
   searchContainer.innerHTML = `
     <div class="food-search-header">
-      <label for="foodSearchInput">🔍 Search Food Database <span class="food-search-status" id="foodSearchStatus">(Ready)</span></label>
+      <div class="ce-label-row">
+        <label for="foodSearchInput">Search foods</label>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-foodSearchInput" title="What is this?">
+          <span class="visually-hidden">Help: food search</span>
+          <svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </button>
+      </div>
+      <div id="help-foodSearchInput" class="ce-help-panel" hidden>
+        <p>Type a food or restaurant item. Results come from the bundled list—tap one to fill meal name and nutrition when available. You can still edit numbers or skip search and type a custom meal.</p>
+      </div>
+      <p class="food-search-status" id="foodSearchStatus" aria-live="polite">(Ready)</p>
     </div>
     <input 
       type="text" 
       id="foodSearchInput" 
       class="food-search-input"
-      placeholder="🔍 Search food database OR type meal name"
       autocomplete="off"
     />
     <div id="foodSearchResults" class="food-search-results"></div>
@@ -219,21 +228,25 @@ function addFoodSearchCSS() {
     .food-search-header {
       margin-bottom: 0.5rem;
     }
-    
-    .food-search-header label {
-      color: #8ecae6;
-      font-weight: bold;
-      font-size: 0.95rem;
-      display: block;
-      width: 100%;
-      margin-top: 0.5rem;
+
+    .food-search-header .ce-label-row {
+      justify-content: flex-start;
+      gap: 0.2rem;
     }
-    
+
+    .food-search-header .ce-label-row label {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--ce-text, #e6eae8);
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+
     .food-search-status {
-      font-size: 0.85rem;
-      color: #06d6a0;
+      font-size: 0.82rem;
+      color: var(--ce-text-muted, #8b9691);
       font-weight: normal;
-      margin-left: 0.5rem;
+      margin: 0.25rem 0 0;
     }
     
     .food-search-input {
@@ -241,36 +254,36 @@ function addFoodSearchCSS() {
       width: 100%;
       margin-top: 0.5rem;
       padding: 0.5rem;
-      background: #2a2a2a;
-      border: 1px solid #3a3a3a;
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid #2a302e;
       border-radius: 5px;
-      color: #f0f0f0;
+      color: #e6eae8;
       font-size: 0.9rem;
       transition: border-color 0.2s;
     }
     
     .food-search-input:focus {
       outline: none;
-      border-color: #8ecae6;
+      border-color: #5a8f7b;
     }
     
     .food-search-results {
       max-height: 300px;
       overflow-y: auto;
       margin-top: 0.5rem;
-      background: #2a2a2a;
+      background: #141816;
       border-radius: 6px;
       display: none;
     }
     
     .food-search-results.active {
       display: block;
-      border: 1px solid #444;
+      border: 1px solid #2a302e;
     }
     
     .food-result-item {
       padding: 0.75rem 1rem;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #2a302e;
       cursor: pointer;
       transition: background 0.15s;
     }
@@ -280,7 +293,7 @@ function addFoodSearchCSS() {
     }
     
     .food-result-item:hover {
-      background: #3a3a3a;
+      background: #1b201e;
     }
     
     .food-result-name {
@@ -291,7 +304,7 @@ function addFoodSearchCSS() {
     }
     
     .food-result-restaurant {
-      color: #ffb703;
+      color: #d4b84a;
       font-size: 0.85rem;
       margin-bottom: 0.25rem;
     }
@@ -299,10 +312,10 @@ function addFoodSearchCSS() {
     .food-result-category {
       display: inline-block;
       padding: 0.15rem 0.5rem;
-      background: #3a3a3a;
+      background: #1b201e;
       border-radius: 12px;
       font-size: 0.75rem;
-      color: #8ecae6;
+      color: #9ebfb4;
       margin-right: 0.5rem;
     }
     
@@ -328,13 +341,13 @@ function addFoodSearchCSS() {
       font-size: 0.9rem;
     }
     
-    /* Category colors */
-    .category-fruits { background: #f72585 !important; }
-    .category-veggies { background: #06d6a0 !important; }
-    .category-wholeGrains { background: #ffbe0b !important; }
-    .category-leanProteins { background: #1f6feb !important; }
-    .category-processedFoods { background: #fb5607 !important; }
-    .category-sugaryFoods { background: #ff006e !important; }
+    /* Category colors (sage / muted — matches dashboard charts) */
+    .category-fruits { background: #b87a8f !important; }
+    .category-veggies { background: #5a9278 !important; }
+    .category-wholeGrains { background: #a68f6e !important; }
+    .category-leanProteins { background: #6b8cae !important; }
+    .category-processedFoods { background: #b8835a !important; }
+    .category-sugaryFoods { background: #a85a5a !important; }
   `;
   document.head.appendChild(style);
 }
@@ -382,10 +395,10 @@ function setupFoodSearchListeners() {
   if (FoodDatabase.loaded) {
     const stats = FoodDatabase.getStats();
     statusEl.textContent = `(${stats.total} foods available)`;
-    statusEl.style.color = '#06d6a0';
+    statusEl.style.color = '#6fa08e';
   } else {
     statusEl.textContent = '(Loading...)';
-    statusEl.style.color = '#ffb703';
+    statusEl.style.color = '#d4b84a';
   }
 }
 
@@ -520,61 +533,17 @@ function selectFood(foodId) {
  * @param {string} type - Type of notification (success, error, info)
  */
 function showNotification(message, type = 'info') {
-  // Create notification element
   const notification = document.createElement('div');
   notification.className = `food-notification notification-${type}`;
+  notification.setAttribute('role', 'status');
+  notification.setAttribute('aria-live', 'polite');
   notification.textContent = message;
-  
-  // Add CSS if not already added
-  if (!document.getElementById('notification-styles')) {
-    const style = document.createElement('style');
-    style.id = 'notification-styles';
-    style.textContent = `
-      .food-notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        background: #2a2a2a;
-        color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-      }
-      
-      .notification-success {
-        border-left: 4px solid #06d6a0;
-      }
-      
-      .notification-error {
-        border-left: 4px solid #fb5607;
-      }
-      
-      .notification-info {
-        border-left: 4px solid #8ecae6;
-      }
-      
-      @keyframes slideIn {
-        from {
-          transform: translateX(400px);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-  
+
   document.body.appendChild(notification);
-  
-  // Remove after 3 seconds
+
   setTimeout(() => {
-    notification.style.animation = 'slideIn 0.3s ease reverse';
-    setTimeout(() => notification.remove(), 300);
+    notification.style.animation = 'ce-toast-in 0.28s cubic-bezier(0.4, 0, 1, 1) reverse forwards';
+    setTimeout(() => notification.remove(), 280);
   }, 3000);
 }
 

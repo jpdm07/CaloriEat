@@ -4,11 +4,20 @@
 
 console.log('=== STANDALONE-MEAL.JS LOADED ===');
 
-let currentUser = localStorage.getItem('currentUser') || null;
-console.log('Current User:', currentUser);
-
-let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
-console.log('Profiles loaded:', Object.keys(profiles));
+let currentUser;
+let profiles;
+if (typeof bootstrapCaloriEatGuestIfNeeded === 'function') {
+  const boot = bootstrapCaloriEatGuestIfNeeded();
+  currentUser = boot.currentUser;
+  profiles = boot.profiles;
+} else {
+  currentUser = localStorage.getItem('currentUser') || null;
+  profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+  if (!currentUser) {
+    alert('Please open CaloriEat from the home page (index.html).');
+    window.location.href = 'index.html';
+  }
+}
 
 // Track whether we're showing all history or just today
 let showAllHistory = false;
@@ -44,16 +53,16 @@ const foodDB = [
   { name: 'Oatmeal (1 cup)', calories: 166, protein: 5.9, carbs: 28, fat: 3.6, sugar: 1 }
 ];
 
-// Check if user is logged in
-if (!currentUser) {
-  console.error('No user logged in! Redirecting...');
-  alert('Please log in first');
-  window.location.href = 'Index_Modular.html';
-}
-
 // DOM Elements
 const menuIcon = document.getElementById('menuIcon');
 const menuDropdown = document.getElementById('menuDropdown');
+
+function syncStandaloneMenuLayout() {
+  if (!menuDropdown) return;
+  if (menuDropdown.style.display !== 'block') {
+    menuDropdown.style.display = 'none';
+  }
+}
 const menuLogout = document.getElementById('menuLogout');
 const mealInput = document.getElementById('meal');
 const mealDateInput = document.getElementById('mealDate');
@@ -86,6 +95,15 @@ console.log('DOM Elements found:', {
 // Helper function
 function todayStr() {
   return new Date().toLocaleDateString();
+}
+
+/** Notify index.html to reload profiles from localStorage (e.g. after logging food on this page). */
+function markCaloriEatProfilesDirty() {
+  try {
+    sessionStorage.setItem('ce_calorieat_profiles_dirty', '1');
+  } catch (e) {
+    /* private mode */
+  }
 }
 
 // Helper to convert local date string to YYYY-MM-DD format for date input
@@ -139,6 +157,8 @@ if (veggiesInput) {
   veggiesInput.addEventListener('input', updateVeggieGrams);
 }
 
+window.updateVeggieGramsForCaloriEat = updateVeggieGrams;
+
 // Set default date to today on page load
 function setDefaultMealDate() {
   if (mealDateInput) {
@@ -154,54 +174,58 @@ function setDefaultMealDate() {
 // Initialize default date
 setDefaultMealDate();
 
-// Menu toggle
-if (menuIcon) {
-  console.log('Setting up menu icon click handler');
+if (menuIcon && menuDropdown) {
   menuIcon.addEventListener('click', (e) => {
-    console.log('Menu icon clicked!');
     e.stopPropagation();
-    if (!menuDropdown) {
-      console.error('menuDropdown not found!');
-      return;
-    }
-    
-    // Toggle display
-    if (menuDropdown.style.display === 'block') {
-      console.log('Closing menu');
-      menuDropdown.style.display = 'none';
-    } else {
-      console.log('Opening menu');
-      menuDropdown.style.display = 'block';
-    }
+    const open = menuDropdown.style.display !== 'block';
+    menuDropdown.style.display = open ? 'block' : 'none';
+    menuIcon.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-} else {
-  console.error('menuIcon element not found!');
 }
 
-// Close dropdown when clicking outside
 document.addEventListener('click', (e) => {
-  if (menuDropdown && !menuIcon.contains(e.target) && !menuDropdown.contains(e.target)) {
-    console.log('Clicked outside menu, closing');
+  if (!menuDropdown || !menuIcon) return;
+  if (menuIcon.contains(e.target) || menuDropdown.contains(e.target)) return;
+  menuDropdown.style.display = 'none';
+  menuIcon.setAttribute('aria-expanded', 'false');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menuDropdown && menuIcon) {
     menuDropdown.style.display = 'none';
+    menuIcon.setAttribute('aria-expanded', 'false');
   }
 });
 
-// Prevent dropdown from closing when clicking inside it
 if (menuDropdown) {
   menuDropdown.addEventListener('click', (e) => {
-    console.log('Clicked inside dropdown');
     e.stopPropagation();
   });
 }
 
+window.addEventListener('resize', syncStandaloneMenuLayout);
+
 // Logout functionality
+function refreshStandaloneNavMenu() {
+  const loggedIn = !!localStorage.getItem('currentUser');
+  document.querySelectorAll('.menu-auth-only').forEach((el) => {
+    el.style.display = loggedIn ? '' : 'none';
+  });
+  document.querySelectorAll('.menu-public-only').forEach((el) => {
+    el.style.display = loggedIn ? 'none' : '';
+  });
+  if (typeof window.syncCaloriEatNavLabels === 'function') {
+    window.syncCaloriEatNavLabels();
+  }
+  syncStandaloneMenuLayout();
+}
+
 if (menuLogout) {
   menuLogout.addEventListener('click', (e) => {
-    console.log('Logout clicked');
     e.preventDefault();
     localStorage.removeItem('currentUser');
     currentUser = null;
-    window.location.href = 'Index_Modular.html';
+    window.location.href = 'welcome.html';
   });
 }
 
@@ -221,7 +245,54 @@ if (mealTypeButtons) {
       // Store selected meal type
       selectedMealType = mealType;
       console.log('Meal type selected:', selectedMealType);
+      renderProfileQuickPicks();
     });
+  });
+}
+
+function renderProfileQuickPicks() {
+  var panel = document.getElementById('profileQuickPicksPanel');
+  var chips = document.getElementById('profileQuickPicksChips');
+  if (!panel || !chips) return;
+
+  if (!selectedMealType || !currentUser || typeof window.CaloriEatMealPresets === 'undefined') {
+    panel.hidden = true;
+    return;
+  }
+
+  var prof = JSON.parse(localStorage.getItem('profiles') || '{}');
+  var u = prof[currentUser];
+  if (!u) {
+    panel.hidden = true;
+    return;
+  }
+
+  window.CaloriEatMealPresets.ensureShape(u);
+  var list = u.mealPresets[selectedMealType] || [];
+  var usable = list.filter(function (p) {
+    var n = window.CaloriEatMealPresets.normalize(p);
+    return n && n.name && n.calories != null && !isNaN(n.calories) && n.calories > 0;
+  });
+
+  chips.innerHTML = '';
+  panel.hidden = false;
+
+  if (usable.length === 0) {
+    chips.innerHTML =
+      '<p class="form-hint profile-quick-picks__empty">No saved meals for this time yet. Add them on <a href="profile.html">your profile</a>.</p>';
+    return;
+  }
+
+  usable.forEach(function (p) {
+    var norm = window.CaloriEatMealPresets.normalize(p);
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'profile-quick-pick-chip';
+    btn.textContent = norm.name;
+    btn.addEventListener('click', function () {
+      window.CaloriEatMealPresets.fillLogFoodForm(p);
+    });
+    chips.appendChild(btn);
   });
 }
 
@@ -382,6 +453,7 @@ if (addMealBtn) {
     console.log(`Total meals now: ${user.meals.length}`);
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     console.log('Meal saved to localStorage');
 
     // Clear all inputs including search box
@@ -401,6 +473,7 @@ if (addMealBtn) {
     // Clear meal type selection
     selectedMealType = null;
     mealTypeButtons.forEach(b => b.classList.remove('selected'));
+    renderProfileQuickPicks();
 
     alert('Meal added successfully!');
     console.log('About to render meals...');
@@ -477,7 +550,7 @@ function buildMealRow(meal, index) {
     : `${meal.veggies ?? 0} servings`;
   
   info.innerHTML = `
-    <strong>${meal.name}</strong> ${mealTypeLabel ? `<span style="color: #8ecae6;">[${mealTypeLabel}]</span>` : ''} - ${meal.calories} cal (${meal.date})<br>
+    <strong>${meal.name}</strong> ${mealTypeLabel ? `<span style="color: #7a9e92;">[${mealTypeLabel}]</span>` : ''} - ${meal.calories} cal (${meal.date})<br>
     <span class="meal-macros">
       P:${meal.protein ?? 0}g |
       C:${meal.carbs ?? 0}g |
@@ -578,7 +651,7 @@ function showMealEditor(row, meal, index) {
       <div>
         <label>Veggies (cups)</label>
         <input type="number" class="editVeggies" value="${meal.veggieCups ?? 0}" step="0.1">
-        <span class="editVeggiesGrams" style="font-size: 0.8rem; color: #8ecae6; margin-top: 0.25rem; display: block;">≈ ${meal.veggieGrams || 0}g</span>
+        <span class="editVeggiesGrams" style="font-size: 0.8rem; color: #7a9e92; margin-top: 0.25rem; display: block;">≈ ${meal.veggieGrams || 0}g</span>
       </div>
     </div>
 
@@ -663,6 +736,7 @@ function showMealEditor(row, meal, index) {
     user.meals[index].mealType = editSelectedMealType;
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     renderMeals();
   });
 
@@ -680,6 +754,7 @@ function deleteMeal(index) {
   const user = profiles[currentUser];
   user.meals.splice(index, 1);
   localStorage.setItem('profiles', JSON.stringify(profiles));
+  markCaloriEatProfilesDirty();
   renderMeals();
 }
 
@@ -690,11 +765,11 @@ if (toggleHistoryBtn) {
     
     // Update button text and title
     if (showAllHistory) {
-      toggleHistoryBtn.textContent = '📅 View Today Only';
-      mealListTitle.textContent = 'All Meal History';
+      toggleHistoryBtn.textContent = 'Today only';
+      mealListTitle.textContent = 'All meals';
     } else {
-      toggleHistoryBtn.textContent = '📅 View All History';
-      mealListTitle.textContent = "Today's Meals";
+      toggleHistoryBtn.textContent = 'All history';
+      mealListTitle.textContent = 'Today';
     }
     
     // Re-render meals
@@ -703,6 +778,13 @@ if (toggleHistoryBtn) {
 }
 
 // Initial render
-console.log('=== INITIAL RENDER ===');
+refreshStandaloneNavMenu();
 renderMeals();
-console.log('=== SETUP COMPLETE ===');
+
+(function showToolBottomNav() {
+  const n = document.getElementById('appBottomNav');
+  if (n) {
+    n.classList.add('is-visible');
+    document.body.classList.add('ce-pad-bottom');
+  }
+})();

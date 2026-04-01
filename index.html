@@ -2,274 +2,418 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CaloriEat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#064e3b" />
+  <meta name="color-scheme" content="dark" />
+  <title>CaloriEat — Nutrition &amp; calorie tracker</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="premium.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-  <header>
+<body id="top">
+  <header class="site-header">
   <div class="header-top-row">
     <div class="header-left">
       <h1>CaloriEat</h1>
+      <a href="welcome.html" class="brand" aria-label="CaloriEat home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"/><path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"/></svg>
+        </span>
+        <span class="brand__text">CaloriEat</span>
+      </a>
     </div>
 
-    <div class="menu-icon" id="menuIcon">☰</div>
-    <div class="dropdown" id="menuDropdown">
-      <a href="Index_Modular.html?page=dashboard" id="menuDashboard">Dashboard</a>
-      <a href="Index_Modular.html?page=account" id="menuAccount">Account</a>
-      <a href="Index_Modular.html?page=help" id="menuHelp">Help</a>
-      <a href="Index_Modular.html?page=contact" id="menuContact">Contact</a>
-      <a href="#" id="menuLogout">Logout</a>
+    <div class="header-top-row__cluster">
+      <nav class="header-core-nav" id="headerCoreNav" aria-label="Primary shortcuts">
+        <a href="welcome.html" class="header-core-nav__link">Home</a>
+        <a href="help.html" class="header-core-nav__link">Help</a>
+        <a href="sign-in.html" class="header-core-nav__profile menu-public-only" id="headerNavProfilePublic" aria-label="Sign in to open your profile">
+          <svg class="header-core-nav__profile-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <a href="profile.html" class="header-core-nav__profile menu-auth-only" id="headerNavProfile" aria-label="Your Profile">
+          <svg class="header-core-nav__profile-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+      </nav>
+    <div class="header-menu-wrap">
+      <div class="menu-icon" id="menuIcon" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></div>
+      <nav class="dropdown" id="menuDropdown" aria-label="Main menu">
+        <a href="sign-in.html" id="menuSignIn" class="menu-public-only">Sign in</a>
+        <hr class="menu-divider menu-auth-only" />
+        <a href="index.html?page=dashboard" id="menuDashboard" class="menu-auth-only">Dashboard</a>
+        <a href="set-goals.html" id="menuGoals" class="menu-auth-only">Goals</a>
+        <a href="add-meal.html" id="menuLogFood" class="menu-auth-only">Log Food</a>
+        <a href="weigh-in.html" id="menuWeight" class="menu-auth-only">Weight</a>
+        <a href="profile.html" id="menuAccount" class="menu-auth-only">Profile</a>
+        <a href="index.html?page=help" id="menuAppHelp" class="menu-auth-only">Tracker help</a>
+        <hr class="menu-divider" />
+        <a href="contact.html" id="menuContact">Contact</a>
+        <a href="about.html" id="menuAbout">About</a>
+        <a href="privacy.html" id="menuPrivacy">Privacy</a>
+        <a href="terms.html" id="menuTerms">Terms</a>
+        <a href="security.html" id="menuSecurity">Security</a>
+        <a href="careers.html" id="menuCareers">Careers</a>
+        <hr class="menu-divider menu-auth-only" />
+        <a href="#" id="menuLogout" class="menu-auth-only">Sign out</a>
+      </nav>
     </div>
-  </div>
-
-  <!-- NEW clickable links row INSIDE the blue header -->
-  <div class="header-links-row">
-    <a class="header-link" href="set-goals.html">Set Goals</a>
-    <a class="header-link" href="add-meal.html">Add Meals</a>
-    <a class="header-link" href="weigh-in.html">Weigh In</a>
+    </div>
   </div>
 </header>
 
-  <!-- LOGIN SECTION -->
-  <div class="container" id="loginSection">
-    <h2>Login</h2>
-    <div id="errorPopup">Username/Password does not exist</div>
+  <nav class="app-bottom-nav" id="appBottomNav" aria-label="Quick navigation">
+    <a class="app-bottom-nav__link" href="index.html?page=dashboard">Tracker</a>
+    <a class="app-bottom-nav__link" href="set-goals.html">Goals</a>
+    <a class="app-bottom-nav__link" href="add-meal.html">Log Food</a>
+    <a class="app-bottom-nav__link" href="weigh-in.html">Weight</a>
+    <a class="app-bottom-nav__link" href="help.html">Help</a>
+  </nav>
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" placeholder="e.g., JohnDoe">
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" placeholder="Enter your password">
-
-    <button id="loginBtn">Login</button>
-
-    <div class="forgot-link">
-      <a href="#" id="forgotLink">Forgot Username or Password?</a>
+  <!-- Not signed in: compact gate (full sign-in with photo is on sign-in.html) -->
+  <div class="container login-gate hidden" id="loginSection">
+    <div class="login-gate__card ce-panel">
+      <div class="page-head page-head--section login-gate__head">
+        <h2>You’re Not Signed In</h2>
+        <p>Open the sign-in page to use your profile, create one, or continue as a guest.</p>
+      </div>
+      <div class="login-gate__actions">
+        <a class="btn-welcome-primary login-gate__btn" href="sign-in.html">Sign in or create account</a>
+        <a class="btn-welcome-secondary login-gate__btn" href="index.html?guest=1">Continue as guest</a>
+      </div>
+      <p class="login-gate__note"><a href="welcome.html">← Back to home</a></p>
     </div>
-
-    <div class="signup-link">
-      <p>Don't have an account? <a href="#" id="signUpLink">Sign Up</a></p>
-    </div>
-  </div>
-
-  <!-- ENTER KEY FIX FOR LOGIN -->
-  <script>
-  // Allow Enter key to submit login
-  document.addEventListener('DOMContentLoaded', function() {
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const loginBtn = document.getElementById('loginBtn');
-    
-    // Press Enter on username -> move to password
-    if (usernameInput) {
-      usernameInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          passwordInput.focus();
-        }
-      });
-    }
-    
-    // Press Enter on password -> click login
-    if (passwordInput) {
-      passwordInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          loginBtn.click();
-        }
-      });
-    }
-  });
-  </script>
-
-
-  <!-- RESET POPUP -->
-  <div id="resetPopup" class="hidden popup-card">
-    <h3>Reset Credentials</h3>
-    <p>If you forgot your username or password, click the link below to reset them.</p>
-    <p><a href="#" id="resetLink">Reset Username / Password</a></p>
-    <button id="closeResetPopup" class="btn-close">Close</button>
   </div>
 
   <!-- SIGN UP / PROFILE SETUP SECTION -->
   <div class="container hidden" id="profileSection">
-    <h2>Hello! Let's Set Up Your Account!</h2>
-
-    <div id="signupError" style="
-      display:none;
-      background:#a10000;
-      color:#fff;
-      padding:10px;
-      text-align:center;
-      border-radius:8px;
-      margin-bottom:10px;
-      font-weight:bold;
-      font-size:0.9rem;">
-      <!-- error text goes here -->
+    <div class="page-intro">
+      <p class="eyebrow">Step 1 of 1</p>
+      <h2>Create Your Profile</h2>
+      <p>We’ll store this on your device only—nothing is sent to a server in this version.</p>
     </div>
 
-    <label for="setupUsername">Username:</label>
-    <input type="text" id="setupUsername" placeholder="Create a username">
+    <div id="signupError" role="alert"></div>
 
-    <label for="setupEmail">Email:</label>
-    <input type="email" id="setupEmail" placeholder="Enter your email">
-
-    <label for="setupPassword">Password:</label>
-    <input type="password" id="setupPassword" placeholder="Create a password">
-
-    <label for="birthdateSignup">Birthdate:</label>
-    <input type="date" id="birthdateSignup">
-
-    <label for="heightFtIn">Height (ft/in, e.g. 6'1" or 5 11 or 62 for 6'2"):</label>
-    <input type="text" id="heightFtIn" placeholder="6'1" or 5 11 or 62">
-
-    <label for="weightLbs">Weight (lbs):</label>
-    <input type="number" id="weightLbs" placeholder="e.g., 185" step="0.1">
-
-    <label for="gender">Gender:</label>
-    <select id="gender">
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-    </select>
-
-    <button id="saveProfileBtn">Save Profile</button>
-
-    <div class="forgot-link">
-      <a href="#" id="backToLoginLink">Back to Login</a>
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Account</h3>
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="setupUsername">Username</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-setupUsername" title="What is this?"><span class="visually-hidden">Help: username</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-setupUsername" class="ce-help-panel" hidden><p>The name you use to sign in. Stored only in this browser—not uploaded to a server in this version.</p></div>
+        <input type="text" id="setupUsername" placeholder="Choose a username" autocomplete="username">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="setupEmail">Email</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-setupEmail" title="What is this?"><span class="visually-hidden">Help: email</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-setupEmail" class="ce-help-panel" hidden><p>For your records and profile only. This demo does not send email or sync to the cloud.</p></div>
+        <input type="email" id="setupEmail" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="setupPassword">Password</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-setupPassword" title="What is this?"><span class="visually-hidden">Help: password</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-setupPassword" class="ce-help-panel" hidden><p>Choose at least 8 characters. Kept locally with your profile—there is no “forgot password” email in this build.</p></div>
+        <input type="password" id="setupPassword" placeholder="At least 8 characters" autocomplete="new-password">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="birthdateSignup">Birthdate</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-birthdateSignup" title="What is this?"><span class="visually-hidden">Help: birthdate</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-birthdateSignup" class="ce-help-panel" hidden><p>Used for age-related context in your profile. Pick your real date or leave as needed for your tracking goals.</p></div>
+        <input type="date" id="birthdateSignup">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="heightFtIn">Height</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-heightFtIn" title="What is this?"><span class="visually-hidden">Help: height</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-heightFtIn" class="ce-help-panel" hidden><p>Type height like <strong>6&apos;1&quot;</strong>, <strong>5 11</strong> (feet and inches), or total inches such as <strong>72</strong>. The app parses common formats.</p></div>
+        <input type="text" id="heightFtIn" placeholder="6&apos;1&quot;, 5 11, or 62">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="weightLbs">Weight (lb)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-weightLbs" title="What is this?"><span class="visually-hidden">Help: weight</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-weightLbs" class="ce-help-panel" hidden><p>Your current body weight in pounds. You can use decimals (e.g. 184.5). Used with goals and trends on the dashboard.</p></div>
+        <input type="number" id="weightLbs" placeholder="e.g. 185" step="0.1">
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="gender">Gender</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-gender" title="What is this?"><span class="visually-hidden">Help: gender</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-gender" class="ce-help-panel" hidden><p>Used only in your local profile. Choose the option that best matches how you want the app to refer to baseline estimates.</p></div>
+        <select id="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <button type="button" id="saveProfileBtn">Save profile &amp; continue</button>
     </div>
+
+    <p class="forgot-link">
+      <a href="sign-in.html" id="backToLoginLink">Back to sign in</a>
+    </p>
   </div>
 
   <!-- HOME / APP SECTION (Goals Setting) -->
   <div class="container hidden" id="appSection">
-    <h2 id="welcomeMsg"></h2>
+    <div class="page-head">
+      <h2 id="welcomeMsg"></h2>
+      <p>Adjust your daily calorie target and macro goals anytime.</p>
+    </div>
 
-    <!-- GOAL -->
-    <h2>Set Your Goal</h2>
-    <label for="goal">Diet Goal:</label>
-    <select id="goal">
-      <option value="maintain">Maintain Weight</option>
-      <option value="lose">Lose Weight</option>
-      <option value="gain">Gain Weight</option>
-    </select>
+    <div class="section-block">
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Energy Target</h3>
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="goal">Goal direction</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-goal" title="What is this?"><span class="visually-hidden">Help: goal direction</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-goal" class="ce-help-panel" hidden><p>Tells the app whether you’re aiming to maintain, lose, or gain weight. Pair it with a calorie target that fits your plan (a coach or calculator can help you pick numbers).</p></div>
+        <select id="goal">
+          <option value="maintain">Maintain weight</option>
+          <option value="lose">Lose weight</option>
+          <option value="gain">Gain weight</option>
+        </select>
+      </div>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="targetCalories">Daily calorie target (kcal)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-targetCalories" title="What is this?"><span class="visually-hidden">Help: calorie target</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-targetCalories" class="ce-help-panel" hidden><p>Approximate calories to eat per day. The calorie ring on the dashboard fills toward this number. Adjust anytime—changes apply to new days’ tracking.</p></div>
+        <input type="number" id="targetCalories" placeholder="e.g. 2000">
+      </div>
+      <button type="button" id="saveGoalBtn">Save goal</button>
+    </div>
+    </div>
 
-    <label for="targetCalories">Target Daily Calories:</label>
-    <input type="number" id="targetCalories" placeholder="e.g., 2000">
-    <button id="saveGoalBtn">Save Goal</button>
-
-    <!-- DAILY TARGETS -->
-    <div class="targets-box">
-      <h3>Daily Targets (Macros & Veggies)</h3>
+    <div class="section-block">
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Macro &amp; Produce Targets</h3>
+      </div>
       <div class="targets-grid">
-        <div>
-          <label for="proteinTarget">Protein Target (g):</label>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="proteinTarget">Protein (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-proteinTarget" title="What is this?"><span class="visually-hidden">Help: protein target</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-proteinTarget" class="ce-help-panel" hidden><p>Daily protein in grams. The ring compares what you logged today to this target. Many people start near 0.8–1.2&nbsp;g per kg body weight—tune to your needs.</p></div>
           <input type="number" id="proteinTarget" placeholder="150">
         </div>
-        <div>
-          <label for="carbsTarget">Carbs Target (g):</label>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="carbsTarget">Carbs (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-carbsTarget" title="What is this?"><span class="visually-hidden">Help: carbs target</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-carbsTarget" class="ce-help-panel" hidden><p>Daily carbohydrate grams (starches, sugars, fiber-containing foods count toward carbs on labels). Used for the carbs ring vs. what you log.</p></div>
           <input type="number" id="carbsTarget" placeholder="200">
         </div>
-        <div>
-          <label for="fatTarget">Fat Target (g):</label>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="fatTarget">Fat (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-fatTarget" title="What is this?"><span class="visually-hidden">Help: fat target</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-fatTarget" class="ce-help-panel" hidden><p>Daily fat grams (oils, nuts, dairy fat, etc.). Helps balance energy with protein and carbs; the fat ring tracks progress against this number.</p></div>
           <input type="number" id="fatTarget" placeholder="70">
         </div>
-        <div>
-          <label for="sugarTarget">Sugar Target (g):</label>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="sugarTarget">Sugar (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-sugarTarget" title="What is this?"><span class="visually-hidden">Help: sugar target</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-sugarTarget" class="ce-help-panel" hidden><p>Cap for <strong>total sugar</strong> logged per day (as you enter it on foods). Useful if you’re watching sweets and sugary drinks; guidelines often focus on <em>added</em> sugar—use this field however fits your plan.</p></div>
           <input type="number" id="sugarTarget" placeholder="50">
         </div>
-        <div>
-          <label for="veggiesTarget">Veggies Target (servings):</label>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="veggiesTarget">Vegetable servings</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-veggiesTarget" title="What is this?"><span class="visually-hidden">Help: vegetable servings</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-veggiesTarget" class="ce-help-panel" hidden><p>How many cup-equivalents of vegetables you’re aiming for per day (1 cup ≈ 90&nbsp;g raw on average). Logging uses cups/servings on the meal form.</p></div>
           <input type="number" id="veggiesTarget" placeholder="5">
         </div>
       </div>
-      <button id="saveTargetsBtn">Save Targets</button>
+      <button type="button" id="saveTargetsBtn">Save targets</button>
+    </div>
     </div>
 
-    <!-- ADD MEAL -->
-    <h2>Add Meal</h2>
-
-    <label for="meal">Meal Name:</label>
-    <input type="text" id="meal" placeholder="e.g., Chicken Salad">
-
-    <label for="foodSearch">Search Food:</label>
-    <input type="text" id="foodSearch" placeholder="Search food (e.g., Apple, Rice, Burger)">
-    <ul id="foodResults"></ul>
-
-    <label for="calories">Calories:</label>
-    <input type="number" id="calories" placeholder="e.g., 350">
-
-    <div class="inline-grid-3col">
-      <div>
-        <label for="protein">Protein (g):</label>
-        <input type="number" id="protein" placeholder="e.g., 30">
+    <div class="section-block">
+    <div class="ce-panel">
+      <div class="ce-panel__head">
+        <h3>Quick Log</h3>
+        <div class="ce-panel__head-tools">
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-quick-log-panel" title="What is Quick log?"><span class="visually-hidden">Explain Quick log</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
       </div>
-      <div>
-        <label for="carbs">Carbs (g):</label>
-        <input type="number" id="carbs" placeholder="e.g., 45">
+      <div id="help-quick-log-panel" class="ce-help-panel" hidden><p>For meal types and the full database, use <strong>Log Food</strong> in the header.</p></div>
+
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="meal">Meal name</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-meal" title="What is this?"><span class="visually-hidden">Help: meal name</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-meal" class="ce-help-panel" hidden><p>A short label for what you ate (for your list and charts). If you use <strong>Search foods</strong>, picking an item can fill this and nutrition fields for you.</p></div>
+        <input type="text" id="meal" placeholder="e.g. Chicken salad">
       </div>
-      <div>
-        <label for="fat">Fat (g):</label>
-        <input type="number" id="fat" placeholder="e.g., 10">
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="foodSearch">Search foods</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-foodSearch" title="What is this?"><span class="visually-hidden">Help: search foods</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-foodSearch" class="ce-help-panel" hidden><p>Search the bundled database (restaurant and grocery items). Choosing a result fills calories and macros when available. You can still type a meal manually and enter numbers yourself.</p></div>
+        <input type="text" id="foodSearch" placeholder="Chicken, apple, oatmeal…">
       </div>
+      <ul id="foodResults"></ul>
+
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="calories">Calories (kcal)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-calories" title="What is this?"><span class="visually-hidden">Help: calories</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-calories" class="ce-help-panel" hidden><p>Energy for this meal in kilocalories (kcal), the same “Calories” number you see on nutrition labels.</p></div>
+        <input type="number" id="calories" placeholder="e.g. 350">
+      </div>
+
+      <div class="inline-grid-3col">
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="protein">Protein (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-protein" title="What is this?"><span class="visually-hidden">Help: protein</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-protein" class="ce-help-panel" hidden><p>Protein grams for this meal—helps hit your daily protein ring when summed with other meals.</p></div>
+          <input type="number" id="protein" placeholder="30">
+        </div>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="carbs">Carbs (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-carbs" title="What is this?"><span class="visually-hidden">Help: carbs</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-carbs" class="ce-help-panel" hidden><p>Total carbohydrate grams for this meal (from labels or search results).</p></div>
+          <input type="number" id="carbs" placeholder="45">
+        </div>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="fat">Fat (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-fat" title="What is this?"><span class="visually-hidden">Help: fat</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-fat" class="ce-help-panel" hidden><p>Fat grams for this meal.</p></div>
+          <input type="number" id="fat" placeholder="10">
+        </div>
+      </div>
+
+      <div class="inline-grid-2col">
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="sugar">Sugar (g)</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-sugar" title="What is this?"><span class="visually-hidden">Help: sugar</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-sugar" class="ce-help-panel" hidden><p>Sugar grams for this item/meal as you’re tracking it (often matches label “sugars”). Adds to your daily sugar total.</p></div>
+          <input type="number" id="sugar" placeholder="5">
+        </div>
+        <div class="ce-field">
+          <div class="ce-label-row">
+            <label for="veggies">Vegetable servings</label>
+            <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-veggies" title="What is this?"><span class="visually-hidden">Help: vegetables</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          </div>
+          <div id="help-veggies" class="ce-help-panel" hidden><p>Cup-equivalents of vegetables in this meal (e.g. 1 cup salad ≈ 1). The app uses ~90&nbsp;g per cup for rough gram hints elsewhere.</p></div>
+          <input type="number" id="veggies" placeholder="1">
+        </div>
+      </div>
+
+      <div style="margin-top: 0.5rem;">
+        <button type="button" id="addMealBtn">Add to log</button>
+      </div>
+
+      <div class="row-inline-2col ce-panel__sub">
+        <div>
+          <h4 class="ce-subhead">Weight (optional)</h4>
+          <div class="ce-field">
+            <div class="ce-label-row">
+              <label for="weighInLbs">Weight today (lb)</label>
+              <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-weighInLbs" title="What is this?"><span class="visually-hidden">Help: weigh-in</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+            </div>
+            <div id="help-weighInLbs" class="ce-help-panel" hidden><p>Optional quick entry for today’s weight. For a dated log and history list, use the <strong>Weight</strong> page. Same scale and time of day gives smoother trends.</p></div>
+            <input type="number" id="weighInLbs" placeholder="e.g. 184.5" step="0.1">
+          </div>
+          <button type="button" id="addWeighInBtn">Save weigh-in</button>
+        </div>
+      </div>
+
+      <h4 class="ce-subhead ce-subhead--list">Today’s meals</h4>
+      <div id="mealList"></div>
     </div>
-
-    <div class="inline-grid-2col">
-      <div>
-        <label for="sugar">Sugar (g):</label>
-        <input type="number" id="sugar" placeholder="e.g., 5">
-      </div>
-      <div>
-        <label for="veggies">Veggie Servings:</label>
-        <input type="number" id="veggies" placeholder="e.g., 1">
-      </div>
     </div>
-
-    <button id="addMealBtn">Add Meal</button>
-
-    <!-- WEIGH IN -->
-    <div class="row-inline-2col">
-      <div>
-        <h3>Weigh In</h3>
-        <label for="weighInLbs">Today's Weight (lbs):</label>
-        <input type="number" id="weighInLbs" placeholder="e.g., 184.5" step="0.1">
-        <button id="addWeighInBtn">Save Weigh In</button>
-      </div>
-    </div>
-
-    <h4>Meals</h4>
-    <div id="mealList"></div>
   </div>
 
-<!-- DASHBOARD SECTION -->
+<!-- DASHBOARD -->
 <div class="container hidden" id="dashboardSection">
-  <h2>Dashboard</h2>
+  <div class="page-head">
+    <div class="ce-heading-with-help">
+      <h2>Today at a Glance</h2>
+      <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-dashboard-intro" title="About this screen"><span class="visually-hidden">Explain dashboard summary</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+    </div>
+    <div id="help-dashboard-intro" class="ce-help-panel" hidden><p>Progress rings reset daily. Under <strong>Trends &amp; Insights</strong>, read <strong>Personalized insights</strong> (from your logs and <a href="profile.html">Profile</a>), then expand each chart: tap the row to <strong>expand</strong>, tap again to <strong>collapse</strong>. Tap inside a chart for details or use full-screen for a larger view.</p></div>
+    <div class="progress-share-block">
+      <div class="progress-share-row">
+        <a href="#" id="progressShareBtn" class="progress-share-link" role="button">Share My Progress</a>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-progressShare" title="How sharing works"><span class="visually-hidden">Explain Share My Progress</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-progressShare" class="ce-help-panel" hidden><p>Builds <strong>one image</strong> with your summary, rings, and every trend section (including empty or flat charts). Nothing is uploaded—your browser saves or opens the share sheet so you can text it, email it, or post it.</p></div>
+      <p id="progressShareStatus" class="progress-share-status" role="status" aria-live="polite" hidden></p>
+    </div>
 
-  <!-- SUMMARY -->
-  <div class="summary">
-    <h3>Today's Summary</h3>
-    <p id="userDisplay"></p>
-    <p id="profileDisplay"></p>
+  </div>
 
-    <p id="goalDisplay">Goal: Not Set</p>
-    <p id="totalCalories">Total Calories: 0</p>
-    <p id="remainingCalories">Remaining Calories: -</p>
-    
-    <!-- Average Calories Per Time Period -->
-    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #3a3a3a;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-        <span><strong>Average Calories:</strong></span>
-        <select id="avgCaloriesPeriod" style="width: auto; margin: 0; padding: 0.4rem 0.6rem; font-size: 0.85rem;">
-          <option value="day">Per Day</option>
-          <option value="week">Per Week</option>
-          <option value="month">Per Month</option>
-          <option value="year">Per Year</option>
+  <div class="dash-summary">
+    <div class="dash-summary__meta">
+      <p id="userDisplay" class="dash-user"></p>
+      <p id="profileDisplay" class="dash-profile"></p>
+    </div>
+    <div class="dash-stat-grid">
+      <div class="dash-stat">
+        <span class="dash-stat__label">Goal</span>
+        <span id="goalDisplay" class="dash-stat__value">—</span>
+      </div>
+      <div class="dash-stat">
+        <span class="dash-stat__label">Eaten</span>
+        <span id="totalCalories" class="dash-stat__value">0</span>
+      </div>
+      <div class="dash-stat">
+        <span class="dash-stat__label">Remaining</span>
+        <span id="remainingCalories" class="dash-stat__value">—</span>
+      </div>
+    </div>
+    <div class="dash-avg-block">
+      <div class="dash-avg-head">
+        <span>Average intake</span>
+        <label for="avgCaloriesPeriod" class="visually-hidden">Period</label>
+        <select id="avgCaloriesPeriod" aria-label="Average calories period">
+          <option value="day">Per day</option>
+          <option value="week">Per week</option>
+          <option value="month">Per month</option>
+          <option value="year">Per year</option>
         </select>
       </div>
-      <p id="avgCaloriesDisplay" style="margin-top: 0.5rem; font-size: 1.1rem; color: #8ecae6;">
-        <strong>0 cal/day</strong>
-      </p>
+      <p id="avgCaloriesDisplay"><strong>0 kcal / day</strong></p>
     </div>
   </div>
 
@@ -311,21 +455,48 @@
     </div>
   </div>
 
-  <!-- PROGRESS ANALYSIS SECTION -->
+  <!-- PROGRESS ANALYSIS SECTION — collapsible panels (default closed) -->
   <div class="charts-section">
-    <h3>Progress Analysis</h3>
-    
-<!-- 1) Calorie Intake Chart -->
-    <div class="chart-container" data-chart="calorie">
-      <h4>Calories Per Day</h4>
-      <span class="chart-hint">💡 Click on bars for details</span>
-      <button class="expand-btn" title="Expand to fullscreen">⛶</button>
-      <canvas id="calorieChart" class="chartCanvas"></canvas>
+    <div class="charts-section__intro">
+      <h3 class="charts-section__heading">Trends &amp; Insights</h3>
+      <p class="charts-section__lead">Your broader picture of how you eat over time—calories, macros, meal patterns, food groups, and weight next to your goals. Expand each section below to dig in.</p>
     </div>
+    <p class="charts-section__hint">Tap a row to expand; tap again to collapse. Charts stay open until you close them.</p>
 
+    <section id="dashboardPersonalInsights" class="dashboard-insights-card" aria-labelledby="dashboardPersonalInsightsTitle">
+      <h4 id="dashboardPersonalInsightsTitle" class="dashboard-insights-card__title">Personalized insights</h4>
+      <p class="dashboard-insights-card__sub">Based on your recent logs, goals, and what you saved on <a href="profile.html">Profile</a> (eating habits, notes, usual meals). General ideas—not medical advice.</p>
+      <div id="dashboardInsightsSummary" class="dashboard-insights-card__summary"></div>
+      <ul id="dashboardInsightsTips" class="dashboard-insights-card__list"></ul>
+    </section>
+
+<!-- 1) Calorie Intake Chart -->
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-calorie" aria-expanded="false" aria-controls="dash-chart-body-calorie">
+        <span class="dash-chart-panel__title">Calories per day</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-calorie" hidden>
+    <div class="chart-container" data-chart="calorie">
+      <div class="chart-canvas-wrap">
+        <div class="chart-canvas-head">
+          <span class="chart-hint">Click bars for details</span>
+          <button type="button" class="expand-btn" title="Fullscreen chart" aria-label="Fullscreen">⛶</button>
+        </div>
+        <canvas id="calorieChart" class="chartCanvas"></canvas>
+      </div>
+    </div>
+      </div>
+    </section>
+
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-macros-pie" aria-expanded="false" aria-controls="dash-chart-body-macros-pie">
+        <span class="dash-chart-panel__title">Average macros distribution</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-macros-pie" hidden>
     <div class="pie-chart-container">
       <div class="pie-chart-header">
-        <h4>Average Macros Distribution</h4>
         <div class="time-period-selector">
           <label>Period:</label>
           <select id="macrosPiePeriod" class="period-select">
@@ -338,23 +509,22 @@
       </div>
       <canvas id="macrosPieChart" class="pieCanvas"></canvas>
     </div>
+      </div>
+    </section>
 
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-macros" aria-expanded="false" aria-controls="dash-chart-body-macros">
+        <span class="dash-chart-panel__title">Macros &amp; sugar over time</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-macros" hidden>
     <div class="chart-container" data-chart="macros">
       <div class="chart-header">
-        <h4>Macros & Sugar (grams)</h4>
         <div class="chart-controls">
-          <button class="toggle-btn active" data-metric="protein" style="background: #1f6feb;">
-            💪 Protein
-          </button>
-          <button class="toggle-btn active" data-metric="carbs" style="background: #8ecae6;">
-            🍞 Carbs
-          </button>
-          <button class="toggle-btn active" data-metric="fat" style="background: #ffb703;">
-            🥑 Fat
-          </button>
-          <button class="toggle-btn active" data-metric="sugar" style="background: #fb5607;">
-            🍬 Sugar
-          </button>
+          <button type="button" class="toggle-btn active" data-metric="protein">Protein</button>
+          <button type="button" class="toggle-btn active" data-metric="carbs">Carbs</button>
+          <button type="button" class="toggle-btn active" data-metric="fat">Fat</button>
+          <button type="button" class="toggle-btn active" data-metric="sugar">Sugar</button>
         </div>
       </div>
       
@@ -367,21 +537,32 @@
           <option value="monthly">Monthly</option>
           <option value="weekly">Weekly</option>
         </select>
-        <button id="macrosCalendarBtn" class="calendar-btn hidden">📅 Select Date</button>
+        <button type="button" id="macrosCalendarBtn" class="calendar-btn hidden">Select date</button>
         <input type="date" id="macrosDatePicker" class="date-picker hidden">
       </div>
       
-      <span class="chart-hint">💡 Click on lines for details</span>
-      <button class="expand-btn" title="Expand to fullscreen">⛶</button>
-      <canvas id="macrosChart" class="interactiveChart"></canvas>
+      <div class="chart-canvas-wrap">
+        <div class="chart-canvas-head">
+          <span class="chart-hint">Click points for details</span>
+          <button type="button" class="expand-btn" title="Fullscreen chart" aria-label="Fullscreen">⛶</button>
+        </div>
+        <canvas id="macrosChart" class="interactiveChart"></canvas>
+      </div>
       
       <!-- Legend -->
       <div id="macrosLegend" class="chart-legend"></div>
     </div>
+      </div>
+    </section>
 
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-meal-pie" aria-expanded="false" aria-controls="dash-chart-body-meal-pie">
+        <span class="dash-chart-panel__title">Average calories by meal type</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-meal-pie" hidden>
     <div class="pie-chart-container">
       <div class="pie-chart-header">
-        <h4>Average Calories by Meal Type</h4>
         <div class="time-period-selector">
           <label>Period:</label>
           <select id="mealTypePiePeriod" class="period-select">
@@ -394,23 +575,22 @@
       </div>
       <canvas id="mealTypePieChart" class="pieCanvas"></canvas>
     </div>
+      </div>
+    </section>
 
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-mealtype" aria-expanded="false" aria-controls="dash-chart-body-mealtype">
+        <span class="dash-chart-panel__title">Meal type breakdown over time</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-mealtype" hidden>
     <div class="chart-container" data-chart="mealType">
       <div class="chart-header">
-        <h4>Meal Type Breakdown Over Time</h4>
         <div class="chart-controls">
-          <button class="toggle-btn active" data-metric="breakfast" style="background: #ff9800;">
-            🌅 Breakfast
-          </button>
-          <button class="toggle-btn active" data-metric="lunch" style="background: #ffc107;">
-            ☀️ Lunch
-          </button>
-          <button class="toggle-btn active" data-metric="dinner" style="background: #2196f3;">
-            🌙 Dinner
-          </button>
-          <button class="toggle-btn active" data-metric="snack" style="background: #9c27b0;">
-            🍿 Snack
-          </button>
+          <button type="button" class="toggle-btn active" data-metric="breakfast">Breakfast</button>
+          <button type="button" class="toggle-btn active" data-metric="lunch">Lunch</button>
+          <button type="button" class="toggle-btn active" data-metric="dinner">Dinner</button>
+          <button type="button" class="toggle-btn active" data-metric="snack">Snack</button>
         </div>
       </div>
       
@@ -439,21 +619,32 @@
           <option value="monthly">Monthly</option>
           <option value="weekly">Weekly</option>
         </select>
-        <button id="mealTypeCalendarBtn" class="calendar-btn hidden">📅 Select Date</button>
+        <button type="button" id="mealTypeCalendarBtn" class="calendar-btn hidden">Select date</button>
         <input type="date" id="mealTypeDatePicker" class="date-picker hidden">
       </div>
       
-      <span class="chart-hint">💡 Click on lines for details</span>
-      <button class="expand-btn" title="Expand to fullscreen">⛶</button>
-      <canvas id="mealTypeChart" class="interactiveChart"></canvas>
+      <div class="chart-canvas-wrap">
+        <div class="chart-canvas-head">
+          <span class="chart-hint">Click points for details</span>
+          <button type="button" class="expand-btn" title="Fullscreen chart" aria-label="Fullscreen">⛶</button>
+        </div>
+        <canvas id="mealTypeChart" class="interactiveChart"></canvas>
+      </div>
       
       <!-- Legend -->
       <div id="mealTypeLegend" class="chart-legend"></div>
     </div>
+      </div>
+    </section>
 
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-cat-pie" aria-expanded="false" aria-controls="dash-chart-body-cat-pie">
+        <span class="dash-chart-panel__title">Average food categories distribution</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-cat-pie" hidden>
     <div class="pie-chart-container">
       <div class="pie-chart-header">
-        <h4>Average Food Categories Distribution</h4>
         <div class="time-period-selector">
           <label>Period:</label>
           <select id="categoriesPiePeriod" class="period-select">
@@ -466,29 +657,24 @@
       </div>
       <canvas id="categoriesPieChart" class="pieCanvas"></canvas>
     </div>
+      </div>
+    </section>
 
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-categories" aria-expanded="false" aria-controls="dash-chart-body-categories">
+        <span class="dash-chart-panel__title">Food categories over time</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-categories" hidden>
     <div class="chart-container" data-chart="categories">
       <div class="chart-header">
-        <h4>Food Categories (% of Diet)</h4>
         <div class="chart-controls">
-          <button class="toggle-btn active" data-metric="fruits" style="background: #ff6b9d;">
-            🍎 Fruits
-          </button>
-          <button class="toggle-btn active" data-metric="veggies" style="background: #00c853;">
-            🥦 Veggies
-          </button>
-          <button class="toggle-btn active" data-metric="wholeGrains" style="background: #d4a574;">
-            🌾 Grains
-          </button>
-          <button class="toggle-btn active" data-metric="leanProteins" style="background: #1f6feb;">
-            🍗 Proteins
-          </button>
-          <button class="toggle-btn active" data-metric="processedFoods" style="background: #fb8500;">
-            🍔 Processed
-          </button>
-          <button class="toggle-btn active" data-metric="sugaryFoods" style="background: #dc2626;">
-            🍭 Sugary
-          </button>
+          <button type="button" class="toggle-btn active" data-metric="fruits">Fruits</button>
+          <button type="button" class="toggle-btn active" data-metric="veggies">Veggies</button>
+          <button type="button" class="toggle-btn active" data-metric="wholeGrains">Grains</button>
+          <button type="button" class="toggle-btn active" data-metric="leanProteins">Proteins</button>
+          <button type="button" class="toggle-btn active" data-metric="processedFoods">Processed</button>
+          <button type="button" class="toggle-btn active" data-metric="sugaryFoods">Sugary</button>
         </div>
       </div>
       
@@ -501,320 +687,195 @@
           <option value="monthly">Monthly</option>
           <option value="weekly">Weekly</option>
         </select>
-        <button id="categoriesCalendarBtn" class="calendar-btn hidden">📅 Select Date</button>
+        <button type="button" id="categoriesCalendarBtn" class="calendar-btn hidden">Select date</button>
         <input type="date" id="categoriesDatePicker" class="date-picker hidden">
       </div>
       
-      <span class="chart-hint">💡 Click on lines for details</span>
-      <button class="expand-btn" title="Expand to fullscreen">⛶</button>
-      <canvas id="veggiesChart" class="interactiveChart"></canvas>
+      <div class="chart-canvas-wrap">
+        <div class="chart-canvas-head">
+          <span class="chart-hint">Click points for details</span>
+          <button type="button" class="expand-btn" title="Fullscreen chart" aria-label="Fullscreen">⛶</button>
+        </div>
+        <canvas id="veggiesChart" class="interactiveChart"></canvas>
+      </div>
       
       <!-- Legend -->
       <div id="categoriesLegend" class="chart-legend"></div>
     </div>
+      </div>
+    </section>
 
+    <section class="dash-chart-panel" data-dash-chart-panel>
+      <button type="button" class="dash-chart-panel__toggle" id="dash-chart-toggle-weight" aria-expanded="false" aria-controls="dash-chart-body-weight">
+        <span class="dash-chart-panel__title">Weight over time</span>
+        <span class="dash-chart-panel__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="dash-chart-panel__body" id="dash-chart-body-weight" hidden>
     <div class="chart-container" data-chart="weight">
-      <h4>Weight Over Time</h4>
-      <span class="chart-hint">💡 Click on lines for details</span>
-      <button class="expand-btn" title="Expand to fullscreen">⛶</button>
-      <canvas id="weightChart" class="chartCanvas"></canvas>
+      <div class="chart-canvas-wrap">
+        <div class="chart-canvas-head">
+          <span class="chart-hint">Click points for details</span>
+          <button type="button" class="expand-btn" title="Fullscreen chart" aria-label="Fullscreen">⛶</button>
+        </div>
+        <canvas id="weightChart" class="chartCanvas"></canvas>
+      </div>
     </div>
+      </div>
+    </section>
   </div>
 </div>
 
-  <div class="container hidden" id="accountSection">
-    <h2>Your Account</h2>
-
-    <label for="acctDisplayName">Display Name:</label>
-    <input type="text" id="acctDisplayName" placeholder="Name shown in the app">
-
-    <label for="acctEmail">Email:</label>
-    <input type="email" id="acctEmail" placeholder="Email">
-
-    <label for="acctBirthdate">Birthdate:</label>
-    <input type="date" id="acctBirthdate">
-
-    <label for="acctHeightFtIn">Height (ft/in):</label>
-    <input type="text" id="acctHeightFtIn" placeholder="6'1" or 5 11 or 62">
-
-    <label for="acctWeightLbs">Weight (lbs):</label>
-    <input type="number" id="acctWeightLbs" step="0.1" placeholder="e.g., 184.5">
-
-    <label for="acctGender">Gender:</label>
-    <select id="acctGender">
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-    </select>
-
-    <button id="saveAccountBtn">Update Profile</button>
-
-    <button id="clearDataBtn" style="background:#8b0000; border:1px solid #aa0000;">
-    Clear My Logged Data (meals / weigh-ins)
-    </button>
-
-    <p class="note">Note: Username / password changes are not supported in this demo.</p>
-  </div>
-
-  <!-- HELP SECTION -->
+  <!-- HELP -->
   <div class="container hidden" id="helpSection">
-    <h2>📖 CaloriEat User Guide</h2>
-    <p>Welcome to CaloriEat! This comprehensive guide will help you make the most of your nutrition tracking experience.</p>
+    <div class="page-head page-head--section">
+      <h2>Help Center</h2>
+      <p><strong>You’re in the app.</strong> This guide is for using the tracker while signed in. Before you sign in, use the site’s <a href="help.html">Help</a> page and <a href="faq.html">FAQs</a> for quick answers—each covers different ground so you’re not reading the same text twice. No cloud sync in this version.</p>
+    </div>
 
-    <!-- GETTING STARTED -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🚀 Getting Started</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">First Time Setup</h4>
-      <ol style="color: #f0f0f0;">
-        <li><strong>Create Account:</strong> Sign up with a username and password</li>
-        <li><strong>Complete Profile:</strong> Enter your display name, email, birthdate, height, weight, and gender</li>
-        <li><strong>Set Your Goals:</strong> Navigate to "Set Goals" to define your daily targets</li>
-        <li><strong>Start Tracking:</strong> Begin logging meals and tracking your progress!</li>
+    <p class="help-section-title">Start here</p>
+    <div class="help-card">
+      <h4>First session</h4>
+      <ol>
+        <li><strong>Guest or account:</strong> Try <em>Continue as guest</em> instantly, or create a username—data stays in this browser.</li>
+        <li><strong>Targets:</strong> Open <strong>Goals</strong> and set calories plus macros (protein, carbs, fat, sugar, vegetables).</li>
+        <li><strong>Logging:</strong> Use <strong>Log Food</strong> for search, meal type, and past dates. Save usual meals on <a href="profile.html">Profile</a> for one-tap fill.</li>
+        <li><strong>Insights:</strong> Open <strong>Dashboard</strong> for rings, trends, and weight over time.</li>
       </ol>
+      <p class="tip-callout"><strong>Tip:</strong> Weigh in at a consistent time (for example, morning, before eating) for smoother trend lines.</p>
     </div>
 
-    <!-- DASHBOARD -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">📊 Dashboard</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">Progress Rings</h4>
-      <p style="color: #f0f0f0;">Six color-coded rings display your daily progress:</p>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Calories:</strong> Total calorie intake vs. your goal</li>
-        <li><strong>Protein:</strong> Protein intake in grams</li>
-        <li><strong>Carbs:</strong> Carbohydrate intake in grams</li>
-        <li><strong>Fat:</strong> Fat intake in grams</li>
-        <li><strong>Sugar:</strong> Sugar intake in grams (tracked separately for health monitoring)</li>
-        <li><strong>Veggies:</strong> Vegetable servings (1 serving = 1 cup / 90g)</li>
-      </ul>
-      <p style="color: #06d6a0;"><strong>💡 Tip:</strong> Rings display a green "surpass" halo when you exceed your daily goal!</p>
-
-      <h4 style="color: #fff; margin-top: 1rem;">Meal History</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Today's Meals:</strong> View all meals logged today by default</li>
-        <li><strong>View All History:</strong> Toggle to see your complete meal history across all dates</li>
-        <li><strong>Edit/Delete:</strong> Click any meal to edit or remove it</li>
-        <li><strong>Clear Selected:</strong> Deselect meals with the "Clear Selection" button</li>
-      </ul>
-
-      <h4 style="color: #fff; margin-top: 1rem;">Interactive Charts</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Calorie Intake Chart:</strong> Track total calories over time</li>
-        <li><strong>Meal Type Chart:</strong> See breakdown by Breakfast, Lunch, Dinner, and Snacks</li>
-        <li><strong>Weight Tracking:</strong> Monitor your weight progress over time</li>
-        <li><strong>Time Period Filters:</strong> Toggle between Overall, Yearly, Monthly, Weekly, and Daily views</li>
-        <li><strong>Fullscreen Mode:</strong> Click the fullscreen button (⛶) to expand any chart for detailed viewing</li>
-        <li><strong>Interactive Data:</strong> Hover over chart points to see exact values</li>
-      </ul>
+    <p class="help-section-title">Dashboard</p>
+    <div class="help-card">
+      <h4>Rings &amp; charts</h4>
+      <p>Six rings summarize <strong>calories, protein, carbs, fat, sugar,</strong> and <strong>vegetable servings</strong> (1 cup ≈ 90&nbsp;g). Charts support filters and fullscreen; tap or hover points for values.</p>
+      <p class="tip-callout"><strong>Tip:</strong> A green halo means you’ve met or passed that day’s target—use it as feedback, not a rule.</p>
+      <p class="tip-callout"><strong>Trends &amp; Insights</strong> (below your rings) includes <strong>Personalized insights</strong> from your meal names, macros vs goals, and Profile (eating pattern, notes, usual meals), plus charts for calories, macros, patterns, food groups, and weight—general feedback, not medical advice.</p>
     </div>
 
-    <!-- SET GOALS -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🎯 Set Goals</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">Setting Your Calorie Goal</h4>
-      <p style="color: #f0f0f0;">Choose your diet goal (Maintain Weight, Lose Weight, or Gain Weight) and enter your target daily calories. Here are some general guidelines:</p>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Maintain Weight:</strong> Eat around your maintenance calories (typically your BMR × activity factor)</li>
-        <li><strong>Lose Weight:</strong> Create a calorie deficit of 300-500 calories below maintenance (targeting 0.5-1 lb/week loss)</li>
-        <li><strong>Gain Weight:</strong> Create a calorie surplus of 300-500 calories above maintenance (targeting 0.5-1 lb/week gain)</li>
-      </ul>
-      <p style="color: #06d6a0;"><strong>💡 Tip:</strong> Use an online BMR calculator or consult with a healthcare provider to determine your ideal calorie target based on your age, gender, height, weight, and activity level.</p>
-
-      <h4 style="color: #fff; margin-top: 1rem;">Setting Macro Goals</h4>
-      <p style="color: #f0f0f0;">After setting your calorie goal, enter your macro targets. Here are evidence-based recommendations:</p>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Protein:</strong> Recommended 0.8-1.2g per kg of body weight (higher for active individuals)</li>
-        <li><strong>Carbs:</strong> Typically 45-65% of total calories (4 calories per gram)</li>
-        <li><strong>Fat:</strong> Typically 20-35% of total calories (9 calories per gram)</li>
-        <li><strong>Sugar:</strong> AHA recommends limiting added sugar to max 25g (women) or 36g (men) per day</li>
-        <li><strong>Veggies:</strong> CDC recommends 2-3 cups (servings) per day for optimal health</li>
-      </ul>
-      <p style="color: #06d6a0;"><strong>💡 Tip:</strong> Your goals are automatically saved and persist across sessions! You can adjust them anytime as your needs change.</p>
+    <p class="help-section-title">Food search</p>
+    <div class="help-card">
+      <h4>Database &amp; manual entry</h4>
+      <p>Search loads from the bundled database (metadata reports 15,000+ foods). Pick an item to fill nutrition fields; many vegetables auto-suggest a cup serving. If something isn’t listed, enter numbers manually and still pick meal type and date.</p>
     </div>
 
-    <!-- ADD MEALS -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🍽️ Add Meals</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">Food Database Search (Recommended)</h4>
-      <p style="color: #f0f0f0;">Search our comprehensive database of 15,000+ foods:</p>
-      <ol style="color: #f0f0f0;">
-        <li>Type food name in the search box (e.g., "broccoli", "chicken breast", "McDonald's burger")</li>
-        <li>Browse results with nutrition info and category badges</li>
-        <li>Click any food to auto-fill all fields (calories, macros, and more)</li>
-        <li>Vegetables are automatically detected - the veggies field fills to 1 serving automatically!</li>
-        <li>Select meal type (Breakfast, Lunch, Dinner, or Snack)</li>
-        <li>Choose meal date (defaults to today, or select past date for forgotten meals)</li>
-        <li>Click "Save Meal" to log it</li>
-      </ol>
-      <p style="color: #06d6a0;"><strong>💡 Tip:</strong> Database includes popular restaurant items from McDonald's, Subway, Chipotle, and more!</p>
-
-      <h4 style="color: #fff; margin-top: 1rem;">Manual Entry</h4>
-      <p style="color: #f0f0f0;">If food isn't in database, enter manually:</p>
-      <ol style="color: #f0f0f0;">
-        <li>Enter meal name</li>
-        <li>Fill in calories, protein, carbs, fat, and sugar</li>
-        <li>For vegetables: Enter servings (1 serving = 1 cup = 90g)</li>
-        <li>Select meal type and date</li>
-        <li>Click "Save Meal"</li>
-      </ol>
-
-      <h4 style="color: #fff; margin-top: 1rem;">Meal Types</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Breakfast:</strong> Morning meals</li>
-        <li><strong>Lunch:</strong> Midday meals</li>
-        <li><strong>Dinner:</strong> Evening meals</li>
-        <li><strong>Snack:</strong> Any snacks or small meals between main meals</li>
+    <p class="help-section-title">Goals (science-friendly)</p>
+    <div class="help-card">
+      <h4>Calories &amp; macros</h4>
+      <ul>
+        <li><strong>Weight change:</strong> Small, steady deficits or surpluses (often discussed around 300–500&nbsp;kcal/day) are commonly used; a clinician or dietitian can personalize this.</li>
+        <li><strong>Protein:</strong> Many adults land near roughly 0.8–1.2&nbsp;g/kg body weight; athletes may go higher.</li>
+        <li><strong>Carbs / fat:</strong> Broad guidelines often cite ~45–65% carbs and ~20–35% fat of total energy—tune to what you tolerate and enjoy.</li>
+        <li><strong>Added sugar:</strong> AHA cites about 25&nbsp;g/day (women) and 36&nbsp;g/day (men) as upper limits for <em>added</em> sugar.</li>
+        <li><strong>Produce:</strong> Public-health messaging often encourages multiple cup-equivalents of vegetables daily; your target in the app is yours to set.</li>
       </ul>
-      <p style="color: #f0f0f0;">Track meal timing to see your calorie distribution throughout the day in the Meal Type Chart!</p>
+      <p class="tip-callout"><strong>Medical note:</strong> CaloriEat is a self-tracking tool, not medical advice. For conditions like diabetes, eating disorders, or pregnancy, work with a licensed professional.</p>
+    </div>
 
-      <h4 style="color: #fff; margin-top: 1rem;">Vegetable Tracking</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Auto-Detection:</strong> When you select a vegetable from the database, the veggies field automatically fills to 1 serving</li>
-        <li><strong>Serving Size:</strong> 1 serving = 1 cup = 90 grams</li>
-        <li><strong>Conversion Display:</strong> As you type servings, see the gram equivalent (e.g., "1.5 cups = 135g")</li>
-        <li><strong>Manual Override:</strong> Adjust the auto-filled value if needed (0.5 for half cup, 2 for two cups, etc.)</li>
-      </ul>
-
-      <h4 style="color: #fff; margin-top: 1rem;">Custom Date Selection</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Default:</strong> Meals save to today's date automatically</li>
-        <li><strong>Past Dates:</strong> Select a previous date to log forgotten meals</li>
-        <li><strong>Auto-Reset:</strong> Date picker resets to today after each meal is saved</li>
+    <p class="help-section-title">Privacy</p>
+    <div class="help-card">
+      <h4>Your data stays local</h4>
+      <ul>
+        <li>Profiles, meals, and weigh-ins live in <strong>localStorage</strong> on this device.</li>
+        <li>No cloud backup here—clearing site data or switching browsers starts fresh unless you export elsewhere yourself.</li>
+        <li>After the first load, core screens work offline; Chart.js may cache from CDN depending on browser.</li>
       </ul>
     </div>
 
-    <!-- WEIGH IN -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">⚖️ Weigh In</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">Track Your Weight</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Log Weight:</strong> Enter your current weight and it's automatically timestamped</li>
-        <li><strong>View History:</strong> See all past weigh-ins with dates</li>
-        <li><strong>Weight Chart:</strong> Visualize your weight trend over time on the Dashboard</li>
-        <li><strong>Delete Entries:</strong> Remove incorrect weigh-ins as needed</li>
-      </ul>
-      <p style="color: #06d6a0;"><strong>💡 Tip:</strong> Weigh yourself at the same time each day (ideally morning, after bathroom, before eating) for most accurate tracking!</p>
-    </div>
-
-    <!-- ACCOUNT -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">👤 Account</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">Profile Information</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Display Name:</strong> Your name shown throughout the app</li>
-        <li><strong>Email:</strong> Contact email for your records</li>
-        <li><strong>Birthdate:</strong> Your date of birth (MM/DD/YYYY format)</li>
-        <li><strong>Height:</strong> Your height in feet and inches (e.g., "5" feet and "10" inches)</li>
-        <li><strong>Weight:</strong> Your current weight in pounds (automatically syncs with latest weigh-in)</li>
-        <li><strong>Gender:</strong> Select Male, Female, or Other</li>
-      </ul>
-      <p style="color: #06d6a0;"><strong>💡 Tip:</strong> Keep your profile information up to date, especially your weight, to help you calculate appropriate nutrition goals using external calculators or healthcare provider guidance.</p>
-      <p style="color: #f0f0f0;"><strong>Update Anytime:</strong> Changes save immediately when you click "Save Changes."</p>
-    </div>
-
-    <!-- TIPS & BEST PRACTICES -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">✨ Tips & Best Practices</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <ul style="color: #f0f0f0;">
-        <li><strong>Consistency is Key:</strong> Log meals consistently for accurate tracking and better insights</li>
-        <li><strong>Use Food Search:</strong> Save time by using the database instead of manual entry</li>
-        <li><strong>Track Everything:</strong> Don't forget snacks, drinks with calories, and cooking oils</li>
-        <li><strong>Monitor Sugar:</strong> Keep sugar intake within recommended limits for better health</li>
-        <li><strong>Eat Your Veggies:</strong> Aim for 2-3 servings per day - they're automatically tracked!</li>
-        <li><strong>Review Charts:</strong> Use time period filters to spot trends in your eating habits</li>
-        <li><strong>Adjust Goals:</strong> If losing/gaining too fast or slow, adjust calorie goals accordingly</li>
-        <li><strong>Stay Hydrated:</strong> Remember to drink water throughout the day</li>
-        <li><strong>Be Patient:</strong> Sustainable weight change is 0.5-2 lbs per week</li>
-        <li><strong>Log Before Eating:</strong> Helps with portion control and mindful eating</li>
+    <p class="help-section-title">Food category colors</p>
+    <div class="help-card">
+      <h4>How items are tagged</h4>
+      <ul>
+        <li><span class="cat-badge" style="background:#e879a9;color:#1a0a12">Fruits</span> Fruit and typical fruit dishes</li>
+        <li><span class="cat-badge" style="background:#2dd4bf;color:#042f2e">Veggies</span> Vegetables and salads</li>
+        <li><span class="cat-badge" style="background:#d4a574;color:#1c1410">Whole grains</span> Oats, brown rice, whole wheat</li>
+        <li><span class="cat-badge" style="background:#6b8cae;color:#0f1412">Lean proteins</span> Poultry, fish, tofu, legumes</li>
+        <li><span class="cat-badge" style="background:#fb923c;color:#1c1410">Processed</span> Fast food, deli, many packaged items</li>
+        <li><span class="cat-badge" style="background:#f87171;color:#1c0a0a">Sugary</span> Sweets, sugary drinks, desserts</li>
       </ul>
     </div>
 
-    <!-- NAVIGATION -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🧭 Navigation</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <ul style="color: #f0f0f0;">
-        <li><strong>Hamburger Menu (☰):</strong> Top-left corner - access Dashboard, Account, Help, Contact, and Logout</li>
-        <li><strong>Quick Links:</strong> Blue header bar - fast access to Set Goals, Add Meals, and Weigh In</li>
-        <li><strong>Return to Dashboard:</strong> Click "CaloriEat" logo or select Dashboard from menu</li>
+    <p class="help-section-title">Troubleshooting</p>
+    <div class="help-card">
+      <h4>Common fixes</h4>
+      <ul>
+        <li><strong>Nothing saves:</strong> Allow storage for this site; private mode may clear on exit.</li>
+        <li><strong>Charts blank:</strong> Reload once; confirm network for the Chart.js script if it didn’t cache.</li>
+        <li><strong>Search empty:</strong> Wait for the database to finish loading, then try a shorter query.</li>
+        <li><strong>Rings look wrong:</strong> Confirm today’s date on logged meals and that goals match under <strong>Goals</strong>.</li>
       </ul>
     </div>
 
-    <!-- DATA & PRIVACY -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🔒 Data & Privacy</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <ul style="color: #f0f0f0;">
-        <li><strong>Local Storage:</strong> All data stored on your device (browser localStorage)</li>
-        <li><strong>No Cloud Sync:</strong> Data doesn't leave your device - 100% private</li>
-        <li><strong>No Server Costs:</strong> Works completely offline after initial page load</li>
-        <li><strong>Data Persistence:</strong> Data remains until you clear browser data or logout</li>
-        <li><strong>Backup Reminder:</strong> Since data is local, consider screenshotting important info</li>
-      </ul>
-    </div>
-
-    <!-- FOOD CATEGORIES -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🏷️ Food Categories</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <p style="color: #f0f0f0;">Foods in the database are categorized for easy identification:</p>
-      <ul style="color: #f0f0f0;">
-        <li><span style="background: #f72585; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">Fruits</span> Apples, bananas, berries, etc.</li>
-        <li><span style="background: #06d6a0; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">Veggies</span> Broccoli, spinach, carrots, etc.</li>
-        <li><span style="background: #ffbe0b; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">Whole Grains</span> Brown rice, oats, quinoa, etc.</li>
-        <li><span style="background: #1f6feb; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">Lean Proteins</span> Chicken, fish, tofu, etc.</li>
-        <li><span style="background: #fb5607; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">Processed Foods</span> Fast food, packaged snacks, etc.</li>
-        <li><span style="background: #ff006e; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">Sugary Foods</span> Candy, soda, desserts, etc.</li>
-      </ul>
-    </div>
-
-    <!-- TROUBLESHOOTING -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">🔧 Troubleshooting</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <h4 style="color: #fff; margin-top: 0;">Common Issues</h4>
-      <ul style="color: #f0f0f0;">
-        <li><strong>Data Not Saving:</strong> Check browser settings - localStorage must be enabled</li>
-        <li><strong>Charts Not Loading:</strong> Refresh the page or check internet connection for Chart.js library</li>
-        <li><strong>Food Search Not Working:</strong> Database loads on page load - wait a few seconds and try again</li>
-        <li><strong>Progress Rings Wrong:</strong> Verify meals are logged with correct values and to correct date. Double-check that your goals are set correctly on the Set Goals page.</li>
-        <li><strong>Meals Not Appearing:</strong> Make sure you clicked "Add Meal" after entering all required fields. Check that you're viewing the correct date (Today's Meals vs. View All History).</li>
-      </ul>
-    </div>
-
-    <!-- KEYBOARD SHORTCUTS -->
-    <h3 style="color: #8ecae6; margin-top: 1.5rem;">⌨️ Keyboard Shortcuts</h3>
-    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-      <ul style="color: #f0f0f0;">
-        <li><strong>Login Screen:</strong> Press Enter on username field → moves to password. Press Enter on password → submits login</li>
-        <li><strong>Add Meal Form:</strong> Tab key navigates between fields efficiently</li>
-        <li><strong>Food Search:</strong> Start typing immediately after page loads - search box auto-focuses</li>
-      </ul>
-    </div>
-
-    <!-- VERSION INFO -->
-    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; margin-top: 2rem; border-left: 4px solid #8ecae6;">
-      <p style="color: #9e9e9e; margin: 0; font-size: 0.85rem;">
-        <strong>CaloriEat v2.0</strong> - Comprehensive Nutrition Tracking Web Application<br>
-        Built with HTML, CSS, JavaScript, and Chart.js | Data stored locally for privacy<br>
-        Features: 15,000+ food database, automatic veggie detection, custom date logging, advanced charting, meal type tracking, sugar monitoring
-      </p>
+    <div class="help-version">
+      <p><strong>CaloriEat</strong> — web nutrition tracker · HTML, CSS, JavaScript, Chart.js · Local-first privacy · Large bundled food list, meal types, sugar &amp; produce tracking, interactive charts.</p>
     </div>
   </div>
 
-  <!-- CONTACT SECTION -->
+  <!-- CONTACT -->
   <div class="container hidden" id="contactSection">
-    <h2>Contact Us</h2>
-    <p>Have questions, feedback, or need support? Send us a message!</p>
+    <div class="page-head page-head--section">
+      <div class="ce-heading-with-help">
+        <h2>Contact</h2>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-contact-section-intro" title="About this form"><span class="visually-hidden">Explain contact form</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-contact-section-intro" class="ce-help-panel" hidden><p>Share feedback or ideas for CaloriEat. This demo form doesn’t send email yet—it’s here so the layout matches a production app.</p></div>
+    </div>
     
-    <label for="contactName">Name:</label>
-    <input type="text" id="contactName" placeholder="Your name">
+    <div class="ce-field">
+      <div class="ce-label-row">
+        <label for="contactName">Name</label>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-contactName" title="What is this?"><span class="visually-hidden">Help: contact name</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-contactName" class="ce-help-panel" hidden><p>How you’d like to be addressed if someone follows up on your feedback.</p></div>
+      <input type="text" id="contactName" placeholder="Your name">
+    </div>
 
-    <label for="contactEmail">Email:</label>
-    <input type="email" id="contactEmail" placeholder="your.email@example.com">
+    <div class="ce-field">
+      <div class="ce-label-row">
+        <label for="contactEmail">Email</label>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-contactEmail" title="What is this?"><span class="visually-hidden">Help: contact email</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-contactEmail" class="ce-help-panel" hidden><p>So you can get a reply once this demo form is wired to email or a help desk.</p></div>
+      <input type="email" id="contactEmail" placeholder="you@example.com">
+    </div>
 
-    <label for="contactMessage">Message:</label>
-    <textarea id="contactMessage" rows="5" placeholder="Tell us what's on your mind..."></textarea>
+    <div class="ce-field">
+      <div class="ce-label-row">
+        <label for="contactMessage">Message</label>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-contactMessage" title="What is this?"><span class="visually-hidden">Help: message</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-contactMessage" class="ce-help-panel" hidden><p>Bug reports, feature ideas, or clarity issues—anything that would make CaloriEat easier to use.</p></div>
+      <textarea id="contactMessage" rows="5" placeholder="What would make CaloriEat better for you?"></textarea>
+    </div>
 
-    <button id="sendMessageBtn">Send Message</button>
+    <button id="sendMessageBtn">Send message</button>
     
-    <p class="note">Note: This is a demo app. Messages are not actually sent.</p>
+    <p class="account-note">Demo: submit doesn’t deliver email yet.</p>
   </div>
 
+  <div class="ce-back-to-top" role="navigation" aria-label="End of page">
+    <a href="#top" class="ce-back-to-top__link">Back to top ↑</a>
+  </div>
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="site-footer__copy">© 2025 CaloriEat. All rights reserved.</p>
+      <nav class="site-footer__nav" aria-label="Footer">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
+        <a href="help.html">Help</a>
+        <a href="about.html">About</a>
+      </nav>
+      <p class="site-footer__note">Self-tracking tool—not medical advice.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="guest-session.js"></script>
+  <script src="field-help.js"></script>
+  <script src="nav-from-context.js"></script>
+  <script src="dashboard-insights.js"></script>
   <script src="app.js"></script>
+  <script src="progress-share.js"></script>
+  <script src="ai-chat.js" defer></script>
 </body>
 </html>

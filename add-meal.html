@@ -2,14 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Meal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#064e3b" />
+  <meta name="color-scheme" content="dark" />
+  <title>Log Food — CaloriEat</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="premium.css" />
   <style>
     /* Selected Meal Display */
     .selected-meal-display {
-      background: #2a2a2a;
-      border: 2px solid #1f6feb;
+      background: var(--ce-surface-elevated);
+      border: 2px solid var(--ce-primary);
       border-radius: 8px;
       padding: 0.75rem 1rem;
       margin-bottom: 1rem;
@@ -22,7 +29,7 @@
     
     .selected-meal-label {
       font-size: 0.85rem;
-      color: #8ecae6;
+      color: var(--ce-accent);
       font-weight: bold;
       margin-bottom: 0.25rem;
     }
@@ -51,32 +58,72 @@
     }
   </style>
 </head>
-<body>
-  <header>
+<body id="top">
+  <header class="site-header">
     <div class="header-top-row">
       <div class="header-left">
         <h1>CaloriEat</h1>
+        <a href="welcome.html" class="brand" aria-label="CaloriEat home">
+          <span class="brand__mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"/><path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"/></svg>
+          </span>
+          <span class="brand__text">CaloriEat</span>
+        </a>
       </div>
 
-      <div class="menu-icon" id="menuIcon" style="display: block;">☰</div>
-      <div class="dropdown" id="menuDropdown">
-        <a href="Index_Modular.html" id="menuDashboard">Dashboard</a>
-        <a href="Index_Modular.html?page=account" id="menuAccount">Account</a>
-        <a href="Index_Modular.html?page=help" id="menuHelp">Help</a>
-        <a href="Index_Modular.html?page=contact" id="menuContact">Contact</a>
-        <a href="#" id="menuLogout">Logout</a>
+      <div class="header-top-row__cluster">
+        <nav class="header-core-nav" id="headerCoreNav" aria-label="Primary shortcuts">
+          <a href="welcome.html" class="header-core-nav__link">Home</a>
+          <a href="help.html" class="header-core-nav__link">Help</a>
+          <a href="sign-in.html" class="header-core-nav__profile menu-public-only" id="headerNavProfilePublic" aria-label="Sign in to open your profile">
+            <svg class="header-core-nav__profile-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+          <a href="profile.html" class="header-core-nav__profile menu-auth-only" id="headerNavProfile" aria-label="Your Profile">
+            <svg class="header-core-nav__profile-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+        </nav>
+      <div class="header-menu-wrap">
+        <div class="menu-icon" id="menuIcon" role="button" tabindex="0" aria-label="Open menu"><span></span><span></span><span></span></div>
+        <nav class="dropdown" id="menuDropdown" aria-label="Main menu">
+          <a href="sign-in.html" id="menuSignIn" class="menu-public-only">Sign in</a>
+          <hr class="menu-divider menu-auth-only" />
+          <a href="index.html?page=dashboard" id="menuDashboard" class="menu-auth-only">Dashboard</a>
+          <a href="set-goals.html" id="menuGoals" class="menu-auth-only">Goals</a>
+          <a href="add-meal.html" id="menuLogFood" class="menu-auth-only">Log Food</a>
+          <a href="weigh-in.html" id="menuWeight" class="menu-auth-only">Weight</a>
+          <a href="profile.html" id="menuAccount" class="menu-auth-only">Profile</a>
+          <a href="index.html?page=help" id="menuAppHelp" class="menu-auth-only">Tracker help</a>
+          <hr class="menu-divider" />
+          <a href="contact.html" id="menuContact">Contact</a>
+          <a href="about.html" id="menuAbout">About</a>
+          <a href="privacy.html" id="menuPrivacy">Privacy</a>
+          <a href="terms.html" id="menuTerms">Terms</a>
+          <a href="security.html" id="menuSecurity">Security</a>
+          <a href="careers.html" id="menuCareers">Careers</a>
+          <hr class="menu-divider menu-auth-only" />
+          <a href="#" id="menuLogout" class="menu-auth-only">Sign out</a>
+        </nav>
       </div>
-    </div>
-
-    <div class="header-links-row" style="display: flex;">
-      <a class="header-link" href="set-goals.html">Set Goals</a>
-      <a class="header-link" href="add-meal.html">Add Meals</a>
-      <a class="header-link" href="weigh-in.html">Weigh In</a>
+      </div>
     </div>
   </header>
 
+  <nav class="app-bottom-nav" id="appBottomNav" aria-label="Quick navigation">
+    <a class="app-bottom-nav__link" href="index.html?page=dashboard">Tracker</a>
+    <a class="app-bottom-nav__link" href="set-goals.html">Goals</a>
+    <a class="app-bottom-nav__link" href="add-meal.html">Log Food</a>
+    <a class="app-bottom-nav__link" href="weigh-in.html">Weight</a>
+    <a class="app-bottom-nav__link" href="help.html">Help</a>
+  </nav>
+
   <main class="container">
-    <h2>Add Meal</h2>
+    <div class="page-head">
+      <div class="ce-heading-with-help">
+        <h2>Log Food</h2>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-addmeal-page" title="About logging food"><span class="visually-hidden">Explain Log Food page</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-addmeal-page" class="ce-help-panel" hidden><p>Search the database, pick a meal type, and save—past dates are supported for catch-up logging.</p></div>
+    </div>
 
     <!-- Hidden field - filled by search box -->
     <input type="hidden" id="meal">
@@ -88,7 +135,13 @@
       <button type="button" class="clear-selection-btn" id="clearSelectionBtn">✕ Clear Selection</button>
     </div>
 
-    <label>Meal Type:</label>
+    <div class="ce-field" style="margin-top: 0;">
+      <div class="ce-label-row">
+        <span class="ce-inline-label">Meal type</span>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-meal-type" title="What is this?"><span class="visually-hidden">Help: meal type</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-add-meal-type" class="ce-help-panel" hidden><p>Pick which part of the day this entry belongs to. It’s used in charts that break down calories and macros by breakfast, lunch, dinner, or snack.</p></div>
+    </div>
     <div class="inline-grid-2col" style="margin-bottom: 1rem;">
       <button type="button" class="meal-type-btn" data-type="breakfast">🌅 Breakfast</button>
       <button type="button" class="meal-type-btn" data-type="lunch">☀️ Lunch</button>
@@ -96,55 +149,102 @@
       <button type="button" class="meal-type-btn" data-type="snack">🍿 Snack</button>
     </div>
 
-    <!-- DATE PICKER - Defaults to today but allows past dates -->
-    <label for="mealDate">Meal Date:</label>
-    <input type="date" id="mealDate" style="margin-bottom: 1rem;">
-    <p style="font-size: 0.85rem; color: #8ecae6; margin-top: -0.75rem; margin-bottom: 1rem;">
-      📅 Leave blank to use today's date, or select a past date to log a forgotten meal.
-    </p>
-   
+    <div class="ce-panel profile-quick-picks" id="profileQuickPicksPanel" hidden>
+      <div class="ce-panel__head">
+        <h3>Usual Meals</h3>
+        <div class="ce-panel__head-tools">
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-addmeal-usual-meals" title="About usual meals on Log Food"><span class="visually-hidden">Explain usual meals on Log Food</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+      </div>
+      <div id="help-addmeal-usual-meals" class="ce-help-panel" hidden><p>These chips come from <strong>Usual Meals</strong> on <a href="profile.html">your profile</a> for the meal type you selected (breakfast, lunch, dinner, or snack). Tap one to fill this form—you can still edit before adding.</p><p>Presets are reusable templates, not today’s diary. Each saved row needs a <strong>name</strong> and <strong>calories</strong>; <strong>P / C / F</strong> are protein, carbs, and fat (grams), and <strong>Sugar</strong> / <strong>Veg</strong> match your dashboard rings—blanks count as zero when you tap a preset.</p></div>
+      <div class="profile-quick-picks__chips" id="profileQuickPicksChips"></div>
+    </div>
 
-    <label for="calories">Calories:</label>
-    <input type="number" id="calories" placeholder="350" min="0">
+    <!-- DATE PICKER - Defaults to today but allows past dates -->
+    <div class="ce-field">
+      <div class="ce-label-row">
+        <label for="mealDate">Meal date</label>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-meal-date" title="What is this?"><span class="visually-hidden">Help: meal date</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-add-meal-date" class="ce-help-panel" hidden><p>Defaults to today. Choose an earlier date to log something you ate on that day (catch-up logging). Use today’s date for meals you’re logging right now.</p></div>
+      <input type="date" id="mealDate" style="margin-bottom: 0.35rem;">
+    </div>
+
+    <div class="ce-field">
+      <div class="ce-label-row">
+        <label for="calories">Calories (kcal)</label>
+        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-calories" title="What is this?"><span class="visually-hidden">Help: calories</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+      </div>
+      <div id="help-add-calories" class="ce-help-panel" hidden><p>Energy for this meal. If you picked a food from search, this often fills automatically—you can still edit it.</p></div>
+      <input type="number" id="calories" placeholder="350" min="0">
+    </div>
 
     <div class="inline-grid-3col">
-      <div>
-        <label for="protein">Protein (g):</label>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="protein">Protein (g)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-protein" title="What is this?"><span class="visually-hidden">Help: protein</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-add-protein" class="ce-help-panel" hidden><p>Protein grams for this meal (label or database values).</p></div>
         <input type="number" id="protein" placeholder="30" min="0">
       </div>
-      <div>
-        <label for="carbs">Carbs (g):</label>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="carbs">Carbs (g)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-carbs" title="What is this?"><span class="visually-hidden">Help: carbs</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-add-carbs" class="ce-help-panel" hidden><p>Total carbohydrate grams for this meal.</p></div>
         <input type="number" id="carbs" placeholder="45" min="0">
       </div>
-      <div>
-        <label for="fat">Fat (g):</label>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="fat">Fat (g)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-fat" title="What is this?"><span class="visually-hidden">Help: fat</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-add-fat" class="ce-help-panel" hidden><p>Fat grams for this meal.</p></div>
         <input type="number" id="fat" placeholder="10" min="0">
       </div>
     </div>
 
     <div class="inline-grid-2col">
-      <div>
-        <label for="sugar">Sugar (g):</label>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="sugar">Sugar (g)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-sugar" title="What is this?"><span class="visually-hidden">Help: sugar</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-add-sugar" class="ce-help-panel" hidden><p>Sugar grams for this meal—adds to your daily sugar tracking.</p></div>
         <input type="number" id="sugar" placeholder="5" min="0">
       </div>
-      <div>
-        <label for="veggies">Veggies (cups):</label>
+      <div class="ce-field">
+        <div class="ce-label-row">
+          <label for="veggies">Veggies (cups)</label>
+          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-add-veggies" title="What is this?"><span class="visually-hidden">Help: vegetables</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div id="help-add-veggies" class="ce-help-panel" hidden><p>Volume of vegetables in cups (e.g. 1 cup chopped salad). The line below converts to an approximate gram weight for reference.</p></div>
         <input type="number" id="veggies" placeholder="1" step="0.1" min="0">
-        <span id="veggiesGrams" style="font-size: 0.8rem; color: #8ecae6; margin-top: 0.25rem; display: block;">≈ 0g</span>
+        <span id="veggiesGrams" class="field-hint">≈ 0g</span>
       </div>
     </div>
 
-    <button id="addMealBtn">Add Meal</button>
+    <div style="margin-top: 1rem;">
+      <button id="addMealBtn">Add Meal</button>
+    </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+    <div class="meal-list-toolbar">
       <h3 id="mealListTitle">Today's Meals</h3>
-      <button id="toggleHistoryBtn" class="small-btn" style="background: #1f6feb; margin-top: 0;">
-        📅 View All History
-      </button>
+      <div class="meal-list-toolbar__actions">
+        <button type="button" id="toggleHistoryBtn" class="small-btn small-btn--accent">
+          All history
+        </button>
+      </div>
     </div>
     <div id="mealList" class="meal-list"></div>
   </main>
 
+  <script src="guest-session.js"></script>
+  <script src="field-help.js"></script>
+  <script src="nav-from-context.js"></script>
+  <script src="meal-presets.js"></script>
   <script src="food-search-integration.js"></script>
   <script src="standalone-meal.js"></script>
   <script>
@@ -204,5 +304,23 @@
       }
     }
   </script>
+
+  <div class="ce-back-to-top" role="navigation" aria-label="End of page">
+    <a href="#top" class="ce-back-to-top__link">Back to top ↑</a>
+  </div>
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="site-footer__copy">© 2025 CaloriEat. All rights reserved.</p>
+      <nav class="site-footer__nav" aria-label="Footer">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
+        <a href="help.html">Help</a>
+        <a href="about.html">About</a>
+      </nav>
+      <p class="site-footer__note">Self-tracking tool—not medical advice.</p>
+    </div>
+  </footer>
+  <script src="ai-chat.js" defer></script>
 </body>
 </html>

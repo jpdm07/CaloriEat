@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#064e3b" />
+  <meta name="theme-color" content="#1a1f1e" />
   <meta name="color-scheme" content="dark" />
-  <title>Weight — CaloriEat</title>
+  <meta name="description" content="CaloriEat — private nutrition tracking in your browser. Log Food, set targets, and view trends." />
+  <title>CaloriEat — Nutrition tracking</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,11 +14,11 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="premium.css" />
 </head>
-<body id="top">
-  <header class="site-header">
-    <div class="header-top-row">
+<body id="top" class="welcome-page">
+  <header class="site-header site-header--bare">
+    <div class="header-top-row welcome-bar">
       <div class="header-left">
-        <h1>CaloriEat</h1>
+        <h1 class="visually-hidden">CaloriEat</h1>
         <a href="welcome.html" class="brand" aria-label="CaloriEat home">
           <span class="brand__mark" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"/><path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"/></svg>
@@ -25,7 +26,6 @@
           <span class="brand__text">CaloriEat</span>
         </a>
       </div>
-
       <div class="header-top-row__cluster">
         <nav class="header-core-nav" id="headerCoreNav" aria-label="Primary shortcuts">
           <a href="welcome.html" class="header-core-nav__link">Home</a>
@@ -63,48 +63,41 @@
     </div>
   </header>
 
-  <nav class="app-bottom-nav" id="appBottomNav" aria-label="Quick navigation">
-    <a class="app-bottom-nav__link" href="index.html?page=dashboard">Tracker</a>
-    <a class="app-bottom-nav__link" href="set-goals.html">Goals</a>
-    <a class="app-bottom-nav__link" href="add-meal.html">Log Food</a>
-    <a class="app-bottom-nav__link" href="weigh-in.html">Weight</a>
-    <a class="app-bottom-nav__link" href="help.html">Help</a>
-  </nav>
-
-  <main class="container">
-    <div class="page-head">
-      <div class="ce-heading-with-help">
-        <h2>Weight</h2>
-        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-weigh-page-intro" title="About weight logging"><span class="visually-hidden">Explain Weight page</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
-      </div>
-      <div id="help-weigh-page-intro" class="ce-help-panel" hidden><p>Log at a consistent time for cleaner trends. Entries show in history below and on the dashboard weight chart.</p></div>
-    </div>
-
-    <div class="ce-panel">
-      <div class="ce-panel__head">
-        <h3>New Entry</h3>
-      </div>
-      <div class="ce-field">
-        <div class="ce-label-row">
-          <label for="weighInLbs">Weight (lb)</label>
-          <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-weigh-page" title="What is this?"><span class="visually-hidden">Help: weight entry</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+  <main class="welcome-main">
+    <section class="welcome-hero">
+      <div class="welcome-hero__copy">
+        <p class="eyebrow">Local-first · No account required to try</p>
+        <div class="welcome-hero__title-row">
+          <h1>Know what you eat—without giving up your data.</h1>
         </div>
-        <div id="help-weigh-page" class="ce-help-panel" hidden><p>Enter today’s weight in pounds (decimals allowed). Entries appear in history below and on the dashboard weight chart. Same time of day each weigh-in makes trends easier to read.</p></div>
-        <input type="number" id="weighInLbs" placeholder="e.g. 184.5" step="0.1">
+        <div class="welcome-actions">
+          <a class="btn-welcome-primary" href="sign-in.html">Sign in</a>
+          <a class="btn-welcome-secondary" href="index.html?guest=1">Try as guest</a>
+        </div>
+        <p class="welcome-footnote">Guest mode saves to this browser only—the same privacy model as a local profile.</p>
       </div>
-      <div style="margin-top: 0.5rem;">
-        <button type="button" id="addWeighInBtn">Save entry</button>
+      <div class="welcome-hero__visual" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="" width="540" height="640" loading="lazy" decoding="async">
       </div>
-    </div>
+    </section>
 
-    <div class="summary">
-      <div class="ce-heading-with-help">
-        <h3>History</h3>
-        <button type="button" class="ce-help-trigger" aria-expanded="false" aria-controls="help-weigh-history" title="About history"><span class="visually-hidden">Explain weight history</span><svg class="ce-help-trigger__icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
-      </div>
-      <div id="help-weigh-history" class="ce-help-panel" hidden><p>Lists saved weigh-ins from this device, newest first. Clearing logged data from your profile removes these too.</p></div>
-      <div id="weightHistory"></div>
-    </div>
+    <section class="welcome-features" id="faq">
+      <h2>Why Teams and Individuals Use CaloriEat</h2>
+      <ul class="welcome-feature-grid">
+        <li>
+          <h3>Private by Design</h3>
+          <p>Profiles and logs use browser storage—not our servers—in this version.</p>
+        </li>
+        <li>
+          <h3>Serious Tracking</h3>
+          <p>Macros, sugar, produce servings, meal types, weight, and interactive charts.</p>
+        </li>
+        <li>
+          <h3>Fast Logging</h3>
+          <p>Large bundled food list with search and quick manual entry when needed.</p>
+        </li>
+      </ul>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -113,6 +106,7 @@
       <nav class="site-footer__nav" aria-label="Footer">
         <a href="privacy.html">Privacy</a>
         <a href="terms.html">Terms</a>
+        <a href="security.html">Security</a>
         <a href="contact.html">Contact</a>
         <a href="help.html">Help</a>
         <a href="about.html">About</a>
@@ -120,11 +114,10 @@
       <p class="site-footer__note">Self-tracking tool—not medical advice.</p>
     </div>
   </footer>
-
   <script src="guest-session.js"></script>
   <script src="field-help.js"></script>
   <script src="nav-from-context.js"></script>
-  <script src="standalone-weighin.js"></script>
+  <script src="site-nav.js"></script>
   <script src="ai-chat.js" defer></script>
 </body>
 </html>

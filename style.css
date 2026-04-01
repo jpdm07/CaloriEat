@@ -1,24 +1,71 @@
+/* CaloriEat theme */
+:root {
+  --ce-bg: #0a0f0d;
+  --ce-surface: #121a17;
+  --ce-surface-elevated: #1a2420;
+  --ce-border: #2a3830;
+  --ce-text: #e8f2ed;
+  --ce-text-muted: #8fb5a3;
+  --ce-link: #7dd3c0;
+  --ce-primary: #22c55e;
+  --ce-primary-hover: #4ade80;
+  --ce-primary-deep: #16a34a;
+  --ce-accent: #14b8a6;
+  --ce-header-start: #064e3b;
+  --ce-header-end: #0f766e;
+  --ce-danger: #ef4444;
+  --ce-radius: 12px;
+  --ce-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Global layout */
 body {
-  background: #121212;
-  color: #f0f0f0;
-  font-family: Arial, sans-serif;
+  background: var(--ce-bg);
+  background-image: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(20, 184, 166, 0.12), transparent 55%);
+  color: var(--ce-text);
+  font-family: var(--font-sans);
   margin: 0;
   padding: 0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  min-width: 0;
 }
 
 h2, h3, h4 {
   margin-top: 0;
-  color: #fff;
+  color: var(--ce-text);
   font-weight: 600;
 }
 
 header {
-  background: #1f6feb;
+  background: linear-gradient(135deg, var(--ce-header-start) 0%, var(--ce-header-end) 100%);
   color: white;
   text-align: center;
-  padding: 1rem;
+  padding: 1rem 1rem 1.1rem;
   position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 /* make sure header top row items (title + menu icon) sit next to each other nicely */
@@ -32,8 +79,9 @@ header {
 /* keep title from hugging left if menu icon is absolutely positioned */
 .header-left h1 {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* the 3-link row */
@@ -44,19 +92,24 @@ header {
   gap: 1rem;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #cfe8ff;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* clickable text links in the header */
 .header-link {
   cursor: pointer;
-  color: #cfe8ff;
+  color: rgba(255, 255, 255, 0.88);
   text-decoration: none;
+  font-weight: 500;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0.2rem 0;
 }
 
 .header-link:hover {
-  color: #ffffff;
+  color: #fff;
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .menu-icon {
@@ -67,6 +120,8 @@ header {
   font-size: 28px;
   cursor: pointer;
   color: white;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Dropdown menu */
@@ -75,34 +130,37 @@ header {
   position: absolute;
   left: 1rem;
   top: 3rem;
-  background-color: #1e1e1e;
-  border: 1px solid #333;
-  border-radius: 8px;
+  background-color: var(--ce-surface-elevated);
+  border: 1px solid var(--ce-border);
+  border-radius: var(--ce-radius);
   overflow: hidden;
   z-index: 10;
-  min-width: 160px;
+  min-width: 180px;
+  box-shadow: var(--ce-shadow);
 }
 
 .dropdown a {
   display: block;
-  color: #f0f0f0;
+  color: var(--ce-text);
   padding: 0.75rem 1rem;
   text-decoration: none;
   font-size: 0.9rem;
 }
 
 .dropdown a:hover {
-  background-color: #2a2a2a;
+  background-color: rgba(34, 197, 94, 0.12);
 }
 
 /* Sections / cards */
 .container {
+  width: 100%;
   max-width: 600px;
-  margin: 2rem auto;
-  background: #1e1e1e;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  margin: clamp(1rem, 4vw, 2rem) auto;
+  background: var(--ce-surface);
+  padding: clamp(1rem, 4vw, 2rem);
+  border-radius: var(--ce-radius);
+  box-shadow: var(--ce-shadow);
+  border: 1px solid var(--ce-border);
 }
 
 /* Form elements */
@@ -114,12 +172,13 @@ textarea {
   display: block;
   width: 100%;
   margin-top: 0.5rem;
-  background: #2a2a2a;
-  color: #f0f0f0;
-  border: 1px solid #3a3a3a;
-  border-radius: 5px;
-  padding: 0.5rem;
+  background: var(--ce-surface-elevated);
+  color: var(--ce-text);
+  border: 1px solid var(--ce-border);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
   font-size: 0.9rem;
+  font-family: inherit;
 }
 
 textarea {
@@ -127,30 +186,61 @@ textarea {
 }
 
 button {
-  background: #1f6feb;
+  background: var(--ce-primary);
   border: none;
-  color: white;
-  padding: 0.75rem;
+  color: #052e16;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   margin-top: 1rem;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+  touch-action: manipulation;
 }
 button:hover {
-  background: #265dbf;
+  background: var(--ce-primary-hover);
+}
+button:active {
+  transform: scale(0.98);
+}
+
+.btn-guest {
+  background: transparent;
+  color: var(--ce-text);
+  border: 1px solid var(--ce-border);
+  margin-top: 0.75rem;
+}
+.btn-guest:hover {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: var(--ce-primary-deep);
+  color: #fff;
+}
+
+.guest-hint {
+  font-size: 0.8rem;
+  color: var(--ce-text-muted);
+  text-align: center;
+  margin: 0.5rem 0 0;
+  line-height: 1.45;
+  max-width: 22rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Alerts / popups */
 #errorPopup {
   display: none;
-  background: #a10000;
-  color: white;
-  padding: 10px;
+  background: rgba(196, 92, 92, 0.16);
+  color: var(--ce-text);
+  border: 1px solid rgba(196, 92, 92, 0.45);
+  padding: 0.75rem 1rem;
   text-align: center;
-  border-radius: 8px;
+  border-radius: var(--ce-radius);
   margin-bottom: 10px;
-  font-weight: bold;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .popup-card {
@@ -158,26 +248,52 @@ button:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #1e1e1e;
+  background: var(--ce-surface-elevated);
+  color: var(--ce-text);
   padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-  z-index: 20;
+  border-radius: var(--ce-radius);
+  box-shadow: var(--ce-shadow);
+  z-index: 10200;
   width: 90%;
   max-width: 420px;
   text-align: center;
-  border: 1px solid #333;
+  border: 1px solid var(--ce-border);
+}
+
+.popup-card h3 {
+  color: var(--ce-text);
+  margin-top: 0;
+}
+
+.popup-card p,
+.popup-card a {
+  color: var(--ce-text-muted);
+}
+
+.popup-card a {
+  color: var(--ce-link);
 }
 
 .btn-close {
-  background: #333;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: var(--ce-surface);
+  color: var(--ce-text);
+  border: 1px solid var(--ce-border);
+  padding: 0.5rem 1.25rem;
+  border-radius: 10px;
   margin-top: 0.75rem;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-close:hover,
+.btn-close:focus-visible {
+  background: rgba(90, 143, 123, 0.14);
+  border-color: var(--ce-primary);
+  color: #fff;
+  outline: none;
 }
 
 /* Signup / login helper links */
@@ -188,7 +304,7 @@ button:hover {
 }
 .signup-link a,
 .forgot-link a {
-  color: #8ecae6;
+  color: var(--ce-link);
   text-decoration: none;
   font-size: 0.9rem;
 }
@@ -298,9 +414,9 @@ button:hover {
   display: inline-block;
   margin-top: 0;
 }
-.small-btn.edit { background: #265dbf; }
+.small-btn.edit { background: var(--ce-primary-deep); color: #fff; }
 .small-btn.delete { background: #8b0000; }
-.small-btn.save { background: #1f6feb; }
+.small-btn.save { background: var(--ce-primary); color: #052e16; }
 .small-btn.cancel { background: #555; }
 
 /* Meal edit block */
@@ -390,7 +506,7 @@ button:hover {
 .ring-label {
   font-size: 0.9rem;
   margin-top: 0.5rem;
-  color: #8ecae6;
+  color: var(--ce-accent);
 }
 .ring-desc {
   font-size: 0.7rem;
@@ -465,13 +581,14 @@ button:hover {
 
 .meal-type-btn:hover {
   background: #3a3a3a;
-  border-color: #1f6feb;
+  border-color: var(--ce-primary);
 }
 
 .meal-type-btn.selected {
-  background: #1f6feb;
-  border-color: #1f6feb;
-  box-shadow: 0 0 10px rgba(31, 111, 235, 0.5);
+  background: var(--ce-primary);
+  border-color: var(--ce-primary);
+  color: #052e16;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
   font-weight: bold;
 }
 
@@ -576,20 +693,39 @@ button:hover {
   position: relative;
 }
 
+/* Hint + fullscreen control sit in a row above the canvas (avoids overlap with toggles) */
+.chart-canvas-wrap {
+  position: relative;
+  margin-top: 0.25rem;
+}
+
+.chart-canvas-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
 .chart-hint {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 0.75rem;
-  color: #888;
-  font-style: italic;
+  position: static;
+  flex: 1 1 auto;
+  min-width: min(100%, 10rem);
+  max-width: 100%;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: rgba(240, 240, 240, 0.88);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 /* Chart tooltip popup */
 .chart-tooltip {
   position: fixed;
   background: #1e1e1e;
-  border: 2px solid #1f6feb;
+  border: 2px solid var(--ce-primary);
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
@@ -603,7 +739,7 @@ button:hover {
 
 .chart-tooltip-header {
   font-weight: bold;
-  color: #8ecae6;
+  color: var(--ce-accent);
   margin-bottom: 0.5rem;
   font-size: 1rem;
   border-bottom: 1px solid #333;
@@ -682,8 +818,9 @@ button:hover {
 
 .calendar-btn {
   padding: 0.5rem 0.75rem;
-  background: #1f6feb;
-  color: white;
+  background: var(--ce-primary);
+  color: #052e16;
+  font-weight: 600;
   border: none;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -694,7 +831,7 @@ button:hover {
 }
 
 .calendar-btn:hover {
-  background: #265dbf;
+  background: var(--ce-primary-hover);
 }
 
 .date-picker {
@@ -717,17 +854,15 @@ button:hover {
   border: 1px solid #333;
 }
 
-/* Expand Button */
-/* Expand Button - positioned just above chart canvas where grid lines start */
+/* Expand — in .chart-canvas-head it stays in the row; fullscreen uses fixed corner */
 .expand-btn {
-  position: absolute;
-  top: auto;
-  right: 1.75rem;
-  bottom: auto;
+  position: static;
+  flex: 0 0 auto;
+  align-self: center;
   background: rgba(42, 42, 42, 0.95);
   border: 1px solid #3a3a3a;
   color: #f0f0f0;
-  padding: 0.35rem 0.6rem;
+  padding: 0.4rem 0.65rem;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
@@ -735,20 +870,21 @@ button:hover {
   width: auto;
   margin: 0;
   line-height: 1;
-  z-index: 100;
+  z-index: 2;
   backdrop-filter: blur(4px);
   pointer-events: auto;
-  height: 28px;
+  min-height: 32px;
+  min-width: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .expand-btn:hover {
-  background: rgba(31, 111, 235, 0.95);
-  border-color: #1f6feb;
+  background: rgba(22, 163, 74, 0.95);
+  border-color: var(--ce-primary);
   transform: scale(1.15);
-  box-shadow: 0 2px 8px rgba(31, 111, 235, 0.3);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
 }
 
 /* Fullscreen Mode */
@@ -772,11 +908,34 @@ button:hover {
   max-height: none !important;
 }
 
+/* Pin only the expand control to the viewport corner in fullscreen (hint hidden) */
+.chart-container.fullscreen .chart-canvas-head {
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top, 0px));
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  left: auto;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  justify-content: flex-end;
+  z-index: 10001;
+  pointer-events: none;
+  background: transparent;
+}
+
+.chart-container.fullscreen .chart-canvas-head .chart-hint {
+  display: none;
+}
+
+.chart-container.fullscreen .chart-canvas-head .expand-btn {
+  pointer-events: auto;
+}
+
 .chart-container.fullscreen .expand-btn {
+  position: static;
   background: rgba(139, 0, 0, 0.95);
   border-color: #8b0000;
-  top: 2rem !important;
-  right: 2rem;
 }
 
 .chart-container.fullscreen .expand-btn:hover {
@@ -797,7 +956,7 @@ body.fullscreen-active {
 .legend-title {
   font-size: 0.95rem;
   font-weight: bold;
-  color: #8ecae6;
+  color: var(--ce-accent);
   margin-bottom: 0.75rem;
   text-align: center;
 }
@@ -884,7 +1043,7 @@ body.fullscreen-active {
 }
 
 .pie-chart-header h4 {
-  color: #8ecae6;
+  color: var(--ce-accent);
   margin: 0;
   font-size: 1rem;
 }
@@ -905,6 +1064,29 @@ body.fullscreen-active {
   .pieCanvas {
     max-width: 100%;
     max-height: 300px;
+  }
+}
+
+/* Mobile: 16px+ on form fields reduces iOS Safari auto-zoom on focus */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-links-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.35rem;
+    column-gap: 0.75rem;
+  }
+
+  .menu-icon {
+    left: 12px;
+    top: 14px;
   }
 }
 
@@ -933,9 +1115,10 @@ body.fullscreen-active {
     white-space: nowrap;
   }
   
-  .expand-btn {
-    right: 1.5rem !important;
-    top: 1.5rem !important;
+  .chart-canvas-head .expand-btn {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
   }
 }
 

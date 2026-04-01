@@ -2,44 +2,96 @@
  * STANDALONE WEIGH IN PAGE
  ********************************/
 
-let currentUser = localStorage.getItem('currentUser') || null;
-let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+let currentUser;
+let profiles;
+if (typeof bootstrapCaloriEatGuestIfNeeded === 'function') {
+  const boot = bootstrapCaloriEatGuestIfNeeded();
+  currentUser = boot.currentUser;
+  profiles = boot.profiles;
+} else {
+  currentUser = localStorage.getItem('currentUser') || null;
+  profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+  if (!currentUser) {
+    alert('Please open CaloriEat from the home page (index.html).');
+    window.location.href = 'index.html';
+  }
+}
 
-// Check if user is logged in
-if (!currentUser) {
-  alert('Please log in first');
-  window.location.href = 'Index_Modular.html';
+function markCaloriEatProfilesDirty() {
+  try {
+    sessionStorage.setItem('ce_calorieat_profiles_dirty', '1');
+  } catch (e) {
+    /* ignore */
+  }
 }
 
 // DOM Elements
 const menuIcon = document.getElementById('menuIcon');
 const menuDropdown = document.getElementById('menuDropdown');
+
+function syncStandaloneMenuLayout() {
+  if (!menuDropdown) return;
+  if (menuDropdown.style.display !== 'block') {
+    menuDropdown.style.display = 'none';
+  }
+}
 const menuLogout = document.getElementById('menuLogout');
 const weighInLbsInput = document.getElementById('weighInLbs');
 const addWeighInBtn = document.getElementById('addWeighInBtn');
 const weightHistory = document.getElementById('weightHistory');
 
-// Menu toggle
-if (menuIcon) {
+if (menuIcon && menuDropdown) {
   menuIcon.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (!menuDropdown) return;
-    menuDropdown.style.display =
-      (menuDropdown.style.display === 'block') ? 'none' : 'block';
+    const open = menuDropdown.style.display !== 'block';
+    menuDropdown.style.display = open ? 'block' : 'none';
+    menuIcon.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 }
 
-// Close dropdown when clicking outside
-document.addEventListener('click', () => {
-  if (menuDropdown) menuDropdown.style.display = 'none';
+document.addEventListener('click', (e) => {
+  if (!menuDropdown || !menuIcon) return;
+  if (menuIcon.contains(e.target) || menuDropdown.contains(e.target)) return;
+  menuDropdown.style.display = 'none';
+  menuIcon.setAttribute('aria-expanded', 'false');
 });
 
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menuDropdown && menuIcon) {
+    menuDropdown.style.display = 'none';
+    menuIcon.setAttribute('aria-expanded', 'false');
+  }
+});
+
+if (menuDropdown) {
+  menuDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+}
+
+window.addEventListener('resize', syncStandaloneMenuLayout);
+
 // Logout functionality
+function refreshStandaloneNavMenu() {
+  const loggedIn = !!localStorage.getItem('currentUser');
+  document.querySelectorAll('.menu-auth-only').forEach((el) => {
+    el.style.display = loggedIn ? '' : 'none';
+  });
+  document.querySelectorAll('.menu-public-only').forEach((el) => {
+    el.style.display = loggedIn ? 'none' : '';
+  });
+  if (typeof window.syncCaloriEatNavLabels === 'function') {
+    window.syncCaloriEatNavLabels();
+  }
+  syncStandaloneMenuLayout();
+}
+
 if (menuLogout) {
-  menuLogout.addEventListener('click', () => {
+  menuLogout.addEventListener('click', (e) => {
+    e.preventDefault();
     localStorage.removeItem('currentUser');
     currentUser = null;
-    window.location.href = 'Index_Modular.html';
+    window.location.href = 'welcome.html';
   });
 }
 
@@ -106,6 +158,7 @@ if (addWeighInBtn) {
     user.weightLbs = parseFloat(wVal);
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     weighInLbsInput.value = '';
 
     alert('Weight recorded successfully!');
@@ -126,8 +179,18 @@ function deleteWeighIn(index) {
   }
 
   localStorage.setItem('profiles', JSON.stringify(profiles));
+  markCaloriEatProfilesDirty();
   displayWeightHistory();
 }
 
 // Initial display
+refreshStandaloneNavMenu();
 displayWeightHistory();
+
+(function showToolBottomNav() {
+  const n = document.getElementById('appBottomNav');
+  if (n) {
+    n.classList.add('is-visible');
+    document.body.classList.add('ce-pad-bottom');
+  }
+})();

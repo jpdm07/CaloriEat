@@ -2,18 +2,39 @@
  * STANDALONE SET GOALS PAGE - WITH SUGAR TRACKING
  ********************************/
 
-let currentUser = localStorage.getItem('currentUser') || null;
-let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+let currentUser;
+let profiles;
+if (typeof bootstrapCaloriEatGuestIfNeeded === 'function') {
+  const boot = bootstrapCaloriEatGuestIfNeeded();
+  currentUser = boot.currentUser;
+  profiles = boot.profiles;
+} else {
+  currentUser = localStorage.getItem('currentUser') || null;
+  profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+  if (!currentUser) {
+    alert('Please open CaloriEat from the home page (index.html).');
+    window.location.href = 'index.html';
+  }
+}
 
-// Check if user is logged in
-if (!currentUser) {
-  alert('Please log in first');
-  window.location.href = 'Index_Modular.html';
+function markCaloriEatProfilesDirty() {
+  try {
+    sessionStorage.setItem('ce_calorieat_profiles_dirty', '1');
+  } catch (e) {
+    /* ignore */
+  }
 }
 
 // DOM Elements
 const menuIcon = document.getElementById('menuIcon');
 const menuDropdown = document.getElementById('menuDropdown');
+
+function syncStandaloneMenuLayout() {
+  if (!menuDropdown) return;
+  if (menuDropdown.style.display !== 'block') {
+    menuDropdown.style.display = 'none';
+  }
+}
 const menuLogout = document.getElementById('menuLogout');
 const goalSelect = document.getElementById('goal');
 const targetCaloriesInput = document.getElementById('targetCalories');
@@ -26,27 +47,57 @@ const veggiesTargetInput = document.getElementById('veggiesTarget');
 const saveTargetsBtn = document.getElementById('saveTargetsBtn');
 const currentGoalDisplay = document.getElementById('currentGoalDisplay');
 
-// Menu toggle
-if (menuIcon) {
+if (menuIcon && menuDropdown) {
   menuIcon.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (!menuDropdown) return;
-    menuDropdown.style.display =
-      (menuDropdown.style.display === 'block') ? 'none' : 'block';
+    const open = menuDropdown.style.display !== 'block';
+    menuDropdown.style.display = open ? 'block' : 'none';
+    menuIcon.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 }
 
-// Close dropdown when clicking outside
-document.addEventListener('click', () => {
-  if (menuDropdown) menuDropdown.style.display = 'none';
+document.addEventListener('click', (e) => {
+  if (!menuDropdown || !menuIcon) return;
+  if (menuIcon.contains(e.target) || menuDropdown.contains(e.target)) return;
+  menuDropdown.style.display = 'none';
+  menuIcon.setAttribute('aria-expanded', 'false');
 });
 
-// Logout functionality
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menuDropdown && menuIcon) {
+    menuDropdown.style.display = 'none';
+    menuIcon.setAttribute('aria-expanded', 'false');
+  }
+});
+
+if (menuDropdown) {
+  menuDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+}
+
+window.addEventListener('resize', syncStandaloneMenuLayout);
+
+function refreshStandaloneNavMenu() {
+  const loggedIn = !!localStorage.getItem('currentUser');
+  document.querySelectorAll('.menu-auth-only').forEach((el) => {
+    el.style.display = loggedIn ? '' : 'none';
+  });
+  document.querySelectorAll('.menu-public-only').forEach((el) => {
+    el.style.display = loggedIn ? 'none' : '';
+  });
+  if (typeof window.syncCaloriEatNavLabels === 'function') {
+    window.syncCaloriEatNavLabels();
+  }
+  syncStandaloneMenuLayout();
+}
+
 if (menuLogout) {
-  menuLogout.addEventListener('click', () => {
+  menuLogout.addEventListener('click', (e) => {
+    e.preventDefault();
     localStorage.removeItem('currentUser');
     currentUser = null;
-    window.location.href = 'Index_Modular.html';
+    window.location.href = 'welcome.html';
   });
 }
 
@@ -115,6 +166,7 @@ if (saveGoalBtn) {
 
     user.goal = { type: goalType, target };
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
 
     alert('Calorie goal saved successfully!');
     displayCurrentGoals();
@@ -141,10 +193,20 @@ if (saveTargetsBtn) {
     user.macroGoals.veggiesTarget = vT;
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
+    markCaloriEatProfilesDirty();
     alert('Macro targets saved successfully!');
     displayCurrentGoals();
   });
 }
 
 // Initial load
+refreshStandaloneNavMenu();
 loadGoals();
+
+(function showToolBottomNav() {
+  const n = document.getElementById('appBottomNav');
+  if (n) {
+    n.classList.add('is-visible');
+    document.body.classList.add('ce-pad-bottom');
+  }
+})();
